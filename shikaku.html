@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>はじめての3D</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+        #canvas {
+            display: block;
+            width: 100vw;
+            height: 100vh;
+        }
+    </style>
+ 
+  </head>
+  <body>
+    <canvas id="canvas"></canvas>
+
+    <script src="https://cdn.jsdelivr.net/npm/three@0.150.1/build/three.min.js"></script>
+    <script>
+    const scene = new THREE.Scene();
+
+    // カメラの作成
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+    camera.position.set(0, 2, 5);
+    camera.lookAt(0, 0, 0);
+
+    // レンダラーの作成
+    const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('canvas') });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.shadowMap.enabled = true
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap
+
+    // ジオメトリとマテリアルの作成
+    const geometry = new THREE.BoxGeometry(1,1,1);
+    // const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+
+    const material = new THREE. MeshStandardMaterial({
+        color: 0x3b82f6,
+        roughness: 0.4,
+        metalness: 0.6,
+    })
+    const cube = new THREE. Mesh (geometry, material)
+    cube.castShadow = true
+    cube.position.y = 0.5
+    scene. add (cube)
+    // const floor = new THREE. Mesh (
+    //     new THREE.PlaneGeometry(20, 20),
+    //     new THREE. MeshStandardMaterial({
+    //         color: 0x000000,
+    //         roughness: 0.95,
+    //         metalness: 0.05,
+    //     }),
+    // )
+    // floor.rotation.x = -Math.PI / 2
+    // floor.position.y = -1
+    // floor.receiveShadow = true
+    // scene. add (floor)
+
+    const ambient = new THREE. AmbientLight(0xffffff, 0.35)
+
+    const key = new THREE.DirectionalLight(0xffffff, 1.0)
+    key.position.set(5, 8, 6)
+    // key.castShadow = true
+    // key.shadow.mapSize. set(2048, 2048)
+    // key.shadow.camera.near = 0.5
+    // key.shadow. camera. far = 30
+    // key.shadow. camera. left = -8
+    // key.shadow.camera.right = 8
+    // key.shadow.camera.top = 8
+    // key.shadow. camera.bottom = -8
+    const fill = new THREE.DirectionalLight(0xffffff, 0.4)
+    fill.position.set(-5, 0, 5)
+    const back = new THREE.DirectionalLight(0xffffff, 0.6)
+    back.position.set(0, 5, -5)
+    // scene. add(ambient, key, fill, back)
+    scene. add(ambient,key)
+
+    // アニメーションループ
+    function animate() {
+        requestAnimationFrame(animate);
+        cube.rotation.x += 0.01;
+        cube.rotation.y += 0.015;
+        renderer.render(scene, camera);
+    }
+    animate();
+// これをjsファイルに入れて実行しても何も表示されない
+    </script>
+  </body>
+</html>
+
+
+
+1.vscodeを起動
+2.フォルダー「THREE」を開く
+3.「cd my-threjs-app」を実行
+4.「npm run dev」を実行
+5.「http://localhost:5173/」が出てくるからそれをブラウザで表示
+6.もしindex.html以外のhtmlを表示させたいときはhttp://localhost:5173/
