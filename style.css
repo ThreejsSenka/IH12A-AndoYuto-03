@@ -1,0 +1,115 @@
+/* ==========================
+   全体設定
+========================== */
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+
+    background-color: black;
+    font-family:
+        "Yu Gothic",
+        "Meiryo",
+        sans-serif;
+}
+
+/* ==========================
+   Canvas
+========================== */
+
+canvas {
+    display: block;
+}
+
+/* ==========================
+   情報パネル
+========================== */
+
+#infoPanel {
+    position: fixed;
+
+    top: 20px;
+    left: 20px;
+
+    width: 280px;
+
+    padding: 15px;
+
+    color: white;
+
+    background: rgba(0, 0, 0, 0.75);
+
+    border: 1px solid rgba(255, 255, 255, 0.3);
+
+    border-radius: 10px;
+
+    backdrop-filter: blur(10px);
+
+    z-index: 10;
+}
+
+#infoPanel h2 {
+    margin-top: 0;
+
+    color: #ffcc00;
+
+    font-size: 22px;
+}
+
+#planetInfo {
+    line-height: 1.8;
+    font-size: 14px;
+}
+
+/* ==========================
+   ガイド表示
+========================== */
+
+#guide {
+    position: fixed;
+
+    left: 50%;
+    bottom: 20px;
+
+    transform: translateX(-50%);
+
+    padding: 10px 18px;
+
+    color: white;
+
+    background: rgba(0, 0, 0, 0.7);
+
+    border-radius: 30px;
+
+    font-size: 14px;
+
+    z-index: 10;
+}
+
+/* ==========================
+   スマホ対応
+========================== */
+
+@media (max-width: 768px) {
+
+    #infoPanel {
+        width: 220px;
+    }
+
+    #infoPanel h2 {
+        font-size: 18px;
+    }
+
+    #planetInfo {
+        font-size: 12px;
+    }
+
+    #guide {
+        font-size: 12px;
+        padding: 8px 14px;
+    }
+}
