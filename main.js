@@ -5,6 +5,10 @@
 import * as THREE from "three";
 import { OrbitControls }
     from "three/addons/controls/OrbitControls.js";
+import marbleTextureUrl from "./src/assets/Marble006.png";
+import onyxTextureUrl from "./src/assets/Onyx013.png";
+import rockTextureUrl from "./src/assets/Rock035.png";
+import nightSkyTextureUrl from "./src/assets/NightSkyHDRI008.png";
 
 
 // =====================================
@@ -180,15 +184,17 @@ const planets = [];
     半径
 */
 const planetData = [
-    ["水星", 5, 0x999999, 0.030],
-    ["金星", 8, 0xffcc66, 0.020],
-    ["地球", 11, 0x3366ff, 0.015],
-    ["火星", 14, 0xcc3300, 0.012],
-    ["木星", 18, 0xcc9966, 0.010],
-    ["土星", 23, 0xd8c28a, 0.008],
-    ["天王星", 28, 0x66ffff, 0.006],
-    ["海王星", 33, 0x3333ff, 0.005]
+    ["水星", 5, 0x999999, 0.030, 0.8, rockTextureUrl],
+    ["金星", 8, 0xffcc66, 0.020, 1.1, marbleTextureUrl],
+    ["地球", 11, 0x3366ff, 0.015, 1.2, nightSkyTextureUrl],
+    ["火星", 14, 0xcc3300, 0.012, 1.0, rockTextureUrl],
+    ["木星", 18, 0xcc9966, 0.010, 2.2, marbleTextureUrl],
+    ["土星", 23, 0xd8c28a, 0.008, 1.9, marbleTextureUrl],
+    ["天王星", 28, 0x66ffff, 0.006, 1.5, onyxTextureUrl],
+    ["海王星", 33, 0x3333ff, 0.005, 1.5, onyxTextureUrl]
 ];
+
+const textureLoader = new THREE.TextureLoader();
 
 
 // =====================================
@@ -236,8 +242,9 @@ planetData.forEach((data) => {
     const distance = data[1];
     const color = data[2];
     const speed = data[3];
-
     const radius = data[4];
+    const texture = textureLoader.load(data[5]);
+    texture.colorSpace = THREE.SRGBColorSpace;
 
 
     const geometry =
@@ -250,7 +257,10 @@ planetData.forEach((data) => {
 
     const material =
         new THREE.MeshStandardMaterial({
-            color: color
+            map: texture,
+            color: 0xffffff,
+            roughness: 0.8,
+            metalness: 0
         });
 
     const planet =
@@ -280,7 +290,9 @@ planetData.forEach((data) => {
 
         const ringMaterial =
             new THREE.MeshStandardMaterial({
-                color: 0xc2b280
+                map: texture,
+                color: 0xffffff,
+                roughness: 0.9
             });
 
         const ring =
@@ -346,45 +358,103 @@ const infoText =
         "planetInfo"
     );
 
-
 // =====================================
 // 惑星クリック
 // =====================================
 
-window.addEventListener(
+renderer.domElement.addEventListener(
     "click",
     (event) => {
 
+        // Canvasの位置と大きさを取得
+        const rect =
+            renderer.domElement.getBoundingClientRect();
+
+        // マウス座標を正規化デバイス座標へ変換
         mouse.x =
-            (event.clientX / window.innerWidth) * 2 - 1;
+            ((event.clientX - rect.left) /
+                rect.width) *
+                2 -
+            1;
 
         mouse.y =
-            -(event.clientY / window.innerHeight) * 2 + 1;
+            -((event.clientY - rect.top) /
+                rect.height) *
+                2 +
+            1;
 
+        // カメラからクリック位置へ光線を飛ばす
         raycaster.setFromCamera(
             mouse,
             camera
         );
 
+        // ここで intersects を作成する
+        // true にすることで土星のリングなども判定対象にする
         const intersects =
             raycaster.intersectObjects(
-                planets
+                planets,
+                true
             );
+
 
         if (intersects.length > 0) {
 
-            const planet =
+            // 最初に交差したオブジェクトを取得
+            let selectedObject =
                 intersects[0].object;
 
-            infoText.textContent =
-                `惑星名: ${planet.userData.name}, 軌道半径: ${planet.userData.distance}, 公転速度: ${planet.userData.speed}`;
+            /*
+                土星のリングをクリックした場合、
+                userData.nameを持つ親オブジェクトまでさかのぼる
+            */
+            while (
+                selectedObject &&
+                !selectedObject.userData.name
+            ) {
+                selectedObject =
+                    selectedObject.parent;
+            }
+
+            // 惑星が取得できなかった場合は処理を終了
+            if (!selectedObject) {
+                return;
+            }
+
+            const selectedPlanet =
+                selectedObject;
+
+            // 情報ウィンドウを表示
+            infoText.innerHTML = `
+                <h3>${selectedPlanet.userData.name}</h3>
+
+                <p>
+                    ${
+                        planetDescriptions[
+                            selectedPlanet.userData.name
+                        ]
+                    }
+                </p>
+
+                <hr>
+
+                <p>
+                    軌道半径：
+                    ${selectedPlanet.userData.distance}
+                </p>
+
+                <p>
+                    公転速度：
+                    ${selectedPlanet.userData.speed}
+                </p>
+            `;
 
         } else {
 
-            infoText.textContent = "";
-
+            // 惑星以外をクリックした場合
+            infoText.textContent =
+                "惑星をクリックしてください";
         }
-
     }
 );
 
