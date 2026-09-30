@@ -10,7 +10,7 @@ body {
     height: 100%;
     overflow: hidden;
 
-    background-color: black;
+    background-color: #07152f;
     font-family:
         "Yu Gothic",
         "Meiryo",
@@ -41,7 +41,7 @@ canvas {
 
     color: white;
 
-    background: rgba(0, 0, 0, 0.75);
+    background: rgba(12, 31, 64, 0.82);
 
     border: 1px solid rgba(255, 255, 255, 0.3);
 
@@ -81,13 +81,49 @@ canvas {
 
     color: white;
 
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(12, 31, 64, 0.82);
 
     border-radius: 30px;
 
     font-size: 14px;
 
     z-index: 10;
+}
+
+/* ==========================
+   公転速度コントロール
+========================== */
+
+#speed-control {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 220px;
+    padding: 14px 16px;
+    color: white;
+    background: rgba(12, 31, 64, 0.82);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+    z-index: 10;
+}
+
+#speed-control label,
+#speed-control output {
+    display: inline-block;
+    font-size: 14px;
+}
+
+#speed-control output {
+    float: right;
+    color: #ffcc00;
+}
+
+#speed-slider {
+    display: block;
+    width: 100%;
+    margin-top: 10px;
+    accent-color: #ffcc00;
 }
 
 /* ==========================
@@ -111,5 +147,17 @@ canvas {
     #guide {
         font-size: 12px;
         padding: 8px 14px;
+    }
+
+    #speed-control {
+        top: 12px;
+        right: 12px;
+        width: 170px;
+        padding: 10px 12px;
+    }
+
+    #speed-control label,
+    #speed-control output {
+        font-size: 12px;
     }
 }

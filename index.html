@@ -18,17 +18,28 @@
         <p id="planetInfo">
             惑星をクリックしてください
         </p>
+
+        <div id="planet-navigation" hidden>
+            <button id="planet-previous" type="button">前の星へ</button>
+            <button id="planet-next" type="button">次の星へ</button>
+        </div>
     </div>
 
     <!-- 操作説明 -->
     <div id="guide">
         ドラッグ：視点回転　
         ホイール：ズーム　
-        惑星クリック：情報表示
+        太陽・惑星クリック：情報表示
+    </div>
+
+    <div id="speed-control">
+        <label for="speed-slider">公転速度</label>
+        <output id="speed-value" for="speed-slider">2.0 年/秒</output>
+        <input id="speed-slider" type="range" min="0" max="10" step="0.5" value="2">
     </div>
 
     <!-- Three.js -->
-    <script type="module" src="main.js"></script>
+    <script type="module" src="scene-loader.js"></script>
 
 </body>
 
