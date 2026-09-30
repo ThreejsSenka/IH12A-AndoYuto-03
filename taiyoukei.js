@@ -5,11 +5,15 @@
 import * as THREE from "three";
 import { OrbitControls }
     from "three/addons/controls/OrbitControls.js";
-import marbleTextureUrl from "./src/assets/Marble006.png";
-import onyxTextureUrl from "./src/assets/Onyx013.png";
-import rockTextureUrl from "./src/assets/Rock035.png";
-import nightSkyTextureUrl from "./src/assets/NightSkyHDRI008.png";
+// import marbleTextureUrl from "./src/assets/Marble006.png";
+// import onyxTextureUrl from "./src/assets/Onyx013.png";
+// import rockTextureUrl from "./src/assets/Rock035.png";
+// import nightSkyTextureUrl from "./src/assets/NightSkyHDRI008.png";
 
+const marbleTextureUrl = "./src/assets/Marble006.png";
+const onyxTextureUrl = "./src/assets/Onyx013.png";
+const rockTextureUrl = "./src/assets/Rock035.png";
+const nightSkyTextureUrl = "./src/assets/NightSkyHDRI008.png";
 
 // =====================================
 // Scene
