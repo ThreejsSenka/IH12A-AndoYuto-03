@@ -7,6 +7,19 @@
     <title>太陽系シミュレーター</title>
 
     <link rel="stylesheet" href="style.css">
+
+        <script type="importmap">
+        {
+        "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"
+        }
+        }
+    </script>
+    <script type="module">
+        import * as THREE from 'three';
+        // ここにThree.jsのコードを記述
+    </script>
 </head>
 
 <body>
@@ -39,8 +52,15 @@
     </div>
 
     <!-- Three.js -->
+
+
     <script type="module" src="scene-loader.js"></script>
 
 </body>
 
 </html>
+
+
+githubpagesでこのHTMLファイルを使用して太陽系シミュレーターを公開する場合、以下の手順でGitHub Pagesにデプロイできます。1. **GitHubリポジトリの作成**:
+   - GitHubにログインし、新しいリポジトリを作成します。リポジトリ名は任意ですが、公開したいプロジェクト名にするとわかりやすいです。
+   - 「Public」を選択し、「Initialize this repository with a README」にチェックを入れないでください。
