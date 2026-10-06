@@ -64,7 +64,11 @@ renderer.setPixelRatio(
 );
 
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.35;
+renderer.toneMappingExposure = 1.05;
+
+// 太陽系銀河のリアルタイムシャドウを有効化
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
 document.body.appendChild(
     renderer.domElement
@@ -125,9 +129,10 @@ scene.add(sun);
 
 const sunlight =
     new THREE.PointLight(
-        0xffffff,
-        180,
-        1000
+        0xfff1cf,
+        320,
+        1000,
+        1
     );
 
 sunlight.position.set(
@@ -135,6 +140,15 @@ sunlight.position.set(
     0,
     0
 );
+
+// 太陽を恒星の光源として扱い、惑星に明暗と影を作る
+sunlight.castShadow = true;
+sunlight.shadow.mapSize.width = 1024;
+sunlight.shadow.mapSize.height = 1024;
+sunlight.shadow.camera.near = 0.5;
+sunlight.shadow.camera.far = 1000;
+sunlight.shadow.bias = -0.0004;
+sunlight.shadow.normalBias = 0.02;
 
 scene.add(
     sunlight
@@ -147,8 +161,8 @@ scene.add(
 
 const ambientLight =
     new THREE.AmbientLight(
-        0xffffff,
-        2.4
+        0x879bc2,
+        0.55
     );
 
 scene.add(
@@ -1042,8 +1056,10 @@ planetData.forEach((data) => {
         new THREE.MeshStandardMaterial({
             map: texture,
             color: data.color,
-            roughness: 0.8,
-            metalness: 0
+            roughness: 1.0,
+            metalness: 0,
+            emissive: data.color,
+            emissiveIntensity: 0.035
         });
 
     const planet =
@@ -1051,6 +1067,9 @@ planetData.forEach((data) => {
             geometry,
             material
         );
+
+    planet.castShadow = true;
+    planet.receiveShadow = true;
 
     // 惑星情報を保存
     planet.userData = {
@@ -1093,6 +1112,9 @@ planetData.forEach((data) => {
 
         ring.rotation.x =
             Math.PI / 2;
+
+        ring.castShadow = true;
+        ring.receiveShadow = true;
 
         planet.add(ring);
     }
