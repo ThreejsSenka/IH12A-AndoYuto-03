@@ -14,6 +14,7 @@ const marbleTextureUrl = "./src/assets/Marble006.png";
 const onyxTextureUrl = "./src/assets/Onyx013.png";
 const rockTextureUrl = "./src/assets/Rock035.png";
 const nightSkyTextureUrl = "./src/assets/NightSkyHDRI008.png";
+const tukiTextureUrl = "./src/assets/tuki.jpg";
 
 // =====================================
 // Scene
@@ -722,149 +723,6 @@ createFutureWormholeRing(6.2, 0x19f9ff, 0.06);
 futureWormhole.position.set(34, -8, -42);
 scene.add(futureWormhole);
 
-
-// =====================================
-// プログラム言語組み合わせ銀河
-// =====================================
-const programGalaxy = new THREE.Group();
-programGalaxy.position.set(920, 90, 620);
-scene.add(programGalaxy);
-
-const programGalaxyCore = new THREE.Mesh(
-    new THREE.IcosahedronGeometry(4.5, 2),
-    new THREE.MeshBasicMaterial({ color: 0x45ff9a, wireframe: true })
-);
-programGalaxyCore.userData = { name: "選択確認コア", isProgramGalaxyCore: true };
-programGalaxy.add(programGalaxyCore);
-programGalaxy.add(new THREE.PointLight(0x45ff9a, 180, 120));
-
-const languageCatalog = {
-    TypeScript:{color:0x3178c6,next:["JavaScript","Python","Go","C#"],items:["Webサイト","Webサービス","デスクトップアプリ"]},
-    Python:{color:0xffd343,next:["TypeScript","C++","Go","Rust"],items:["AIサービス","データ分析","Web API"]},
-    JavaScript:{color:0xf7df1e,next:["TypeScript","Python","PHP","Java"],items:["Webサイト","Webサービス","ブラウザアプリ"]},
-    Java:{color:0xf89820,next:["Kotlin","TypeScript","Python","Go"],items:["業務システム","Web API","Androidアプリ"]},
-    "C#":{color:0x9b4f96,next:["TypeScript","Python","C++","Go"],items:["ゲーム","業務システム","Webサービス"]},
-    "C++":{color:0x659ad2,next:["Python","Rust","C#","Java"],items:["ゲームエンジン","組み込みシステム","高速処理アプリ"]},
-    Go:{color:0x00add8,next:["TypeScript","Python","Rust","Java"],items:["クラウドサービス","Web API","ネットワークツール"]},
-    Rust:{color:0xe86f36,next:["TypeScript","Python","C++","Go"],items:["システムツール","WebAssembly","高速バックエンド"]},
-    Kotlin:{color:0xa97bff,next:["Java","TypeScript","Python","Go"],items:["Androidアプリ","Web API","業務システム"]},
-    Swift:{color:0xfa7343,next:["TypeScript","Python","C++","Go"],items:["iPhoneアプリ","iPadアプリ","macOSアプリ"]},
-    PHP:{color:0x777bb4,next:["JavaScript","TypeScript","Python","Go"],items:["Webサイト","ECサイト","CMS"]},
-    Dart:{color:0x42a5f5,next:["TypeScript","Python","Go","Java"],items:["スマホアプリ","Webアプリ","デスクトップアプリ"]}
-};
-const initialLanguageNames = Object.keys(languageCatalog);
-const languageStars = [], languageLabels = [], productCards = [];
-let firstSelectedLanguage = null, secondSelectedLanguage = null, programTransition = null;
-
-const languageWindow = document.createElement("div");
-languageWindow.style.cssText = "position:fixed;top:12%;left:50%;transform:translateX(-50%);width:min(470px,calc(100vw - 40px));padding:18px;color:white;background:rgba(3,21,13,.94);border:2px solid #45ff9a;border-radius:12px;z-index:30;display:none;font-family:sans-serif";
-document.body.appendChild(languageWindow);
-
-const makeProgramSprite = (text, border, width, height) => {
-    const canvas = document.createElement("canvas");
-    canvas.width = 800; canvas.height = 220;
-    const context = canvas.getContext("2d");
-    context.fillStyle = "rgba(3,21,13,.94)"; context.fillRect(0,0,800,220);
-    context.strokeStyle = border; context.lineWidth = 8; context.strokeRect(5,5,790,210);
-    context.fillStyle = "white"; context.font = "bold 76px sans-serif";
-    context.textAlign = "center"; context.textBaseline = "middle"; context.fillText(text,400,110);
-    const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map:new THREE.CanvasTexture(canvas), transparent:true, depthWrite:false }));
-    sprite.scale.set(width,height,1);
-    sprite.userData.targetScale = new THREE.Vector3(width,height,1);
-    return sprite;
-};
-const clearProgramObjects = () => {
-    [...languageStars,...languageLabels,...productCards].forEach(object => programGalaxy.remove(object));
-    languageStars.length=0; languageLabels.length=0; productCards.length=0;
-};
-const safeProgramPositions = count => {
-    const result=[], blocked=[new THREE.Vector3(0,0,0),new THREE.Vector3(-35,8,-22)];
-    for(let index=0; index<count; index++){
-        let point, attempts=0;
-        do {
-            const angle=Math.random()*Math.PI*2, radius=18+Math.random()*35;
-            point=new THREE.Vector3(Math.cos(angle)*radius,-5+Math.random()*18,Math.sin(angle)*radius);
-            attempts++;
-        } while(attempts<250 && [...blocked,...result].some(other => other.distanceTo(point)<10));
-        result.push(point);
-    }
-    return result;
-};
-const beginProgramTransition = build => {
-    programTransition={ outgoing:[...languageStars,...languageLabels,...productCards], elapsed:0, duration:.8, build, built:false };
-};
-const applyEntryState = object => {
-    object.scale.copy(object.userData.targetScale || new THREE.Vector3(1,1,1)).multiplyScalar(.06);
-    if(object.material) object.material.opacity=0;
-};
-const createLanguageStars = (names, selectionStep, animate=false) => {
-    const build=()=>{
-        clearProgramObjects();
-        const positions=safeProgramPositions(names.length);
-        names.forEach((name,index)=>{
-            const star=new THREE.Mesh(new THREE.SphereGeometry(1.7,28,28),new THREE.MeshBasicMaterial({color:languageCatalog[name].color,transparent:true}));
-            star.position.copy(positions[index]); star.userData={isLanguageStar:true,languageName:name,selectionStep,targetScale:new THREE.Vector3(1,1,1)};
-            const label=makeProgramSprite(name,"#35f2ff",13.5,3.8);
-            label.position.copy(positions[index]).add(new THREE.Vector3(0,4.2,0));
-            if(animate){applyEntryState(star);applyEntryState(label)}
-            programGalaxy.add(star,label); languageStars.push(star); languageLabels.push(label);
-        });
-    };
-    animate ? beginProgramTransition(build) : build();
-};
-const getProgramProducts=()=>{
-    const first=languageCatalog[firstSelectedLanguage].items, second=languageCatalog[secondSelectedLanguage].items;
-    const common=first.filter(item=>second.includes(item));
-    return common.length ? common : [...new Set([first[0],second[0],"Webサービス"])];
-};
-const productDetails={
-    "Webサイト":["企業サイト・作品紹介サイト","ブラウザで情報を閲覧するページです。"],
-    "Webサービス":["予約・投稿・共有サービス","画面とサーバー側の処理を組み合わせて機能を提供します。"],
-    "AIサービス":["画像判定・文章生成支援","学習済みモデルを利用して判定や生成を行います。"],
-    "データ分析":["売上分析・予測","蓄積データを集計して可視化します。"],
-    "Web API":["データ連携API","複数のサービス間でデータを受け渡します。"]
-};
-const showProductDetail=product=>{
-    const detail=productDetails[product]||[`${product}の具体例`,`${firstSelectedLanguage}と${secondSelectedLanguage}を組み合わせて制作できます。`];
-    languageWindow.innerHTML=`<h3>${product}</h3><p><b>具体例：</b>${detail[0]}</p><p>${detail[1]}</p><button id="closeProgramWindow">閉じる</button>`;
-    languageWindow.style.display="block"; document.getElementById("closeProgramWindow").onclick=()=>languageWindow.style.display="none";
-};
-const showProductCards=(animate=true)=>{
-    const build=()=>{
-        clearProgramObjects();
-        const names=getProgramProducts(), positions=safeProgramPositions(names.length);
-        names.forEach((name,index)=>{
-            const card=makeProgramSprite(name,"#ffd84d",17,4.8);
-            card.position.copy(positions[index]); card.userData.isProductCard=true; card.userData.productName=name;
-            if(animate) applyEntryState(card);
-            programGalaxy.add(card); productCards.push(card);
-        });
-    };
-    animate ? beginProgramTransition(build) : build();
-};
-const resetProgramSelection=()=>{firstSelectedLanguage=null;secondSelectedLanguage=null;createLanguageStars(initialLanguageNames,1,true);languageWindow.style.display="none"};
-const showProgramStatus=()=>{
-    languageWindow.innerHTML=`<h3>選択内容</h3><p>1つ目：<b>${firstSelectedLanguage||"未選択"}</b></p><p>2つ目：<b>${secondSelectedLanguage||"未選択"}</b></p><button id="resetProgramSelection">選択内容をリセット</button>`;
-    languageWindow.style.display="block"; document.getElementById("resetProgramSelection").onclick=resetProgramSelection;
-};
-const selectLanguageStar=object=>{
-    if(object.userData.selectionStep===1){firstSelectedLanguage=object.userData.languageName;secondSelectedLanguage=null;createLanguageStars(languageCatalog[firstSelectedLanguage].next,2,true)}
-    else {
-        secondSelectedLanguage=object.userData.languageName;
-        showProductCards(true);
-        showProgramStatus();
-    }
-};
-createLanguageStars(initialLanguageNames,1,false);
-
-const programWormhole=new THREE.Group();
-programWormhole.userData={isProgramWormhole:true};
-programWormhole.add(new THREE.Mesh(new THREE.OctahedronGeometry(3.5,2),new THREE.MeshBasicMaterial({color:0x45ff9a,wireframe:true})));
-programWormhole.position.set(-35,8,-22);programGalaxy.add(programWormhole);
-const futureProgramWormhole=new THREE.Group();futureProgramWormhole.userData={isFutureProgramWormhole:true};
-[7,9,11].forEach((size,index)=>futureProgramWormhole.add(new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(size,size,1+index)),new THREE.LineBasicMaterial({color:[0x45ff9a,0x35f2ff,0xffd84d][index]}))));
-futureProgramWormhole.position.set(30,6,-22);futureGalaxy.add(futureProgramWormhole);
-
 const portalTunnels = [];
 
 const createPortalTunnel = (startPortal, endPortal, colors) => {
@@ -938,7 +796,6 @@ createPortalTunnel(
     futureReturnWormhole,
     [0xff8c42, 0xff2bd6, 0x19f9ff]
 );
-createPortalTunnel(futureProgramWormhole,programWormhole,[0x45ff9a,0x35f2ff,0xffd84d]);
 
 const galaxyConnections = [];
 
@@ -1106,17 +963,18 @@ const clickableBodies = [
     半径
 */
 const planetData = [
-    { name: "水星", distance: 0.387, radius: 0.38, period: 0.241, inclination: 7.0, type: "岩石惑星", color: 0x999999, texture: rockTextureUrl, description: "太陽に最も近く、太陽系で最小の惑星です。" },
+    { name: "水星", distance: 0.387, radius: 0.38, period: 0.241, inclination: 7.0, type: "岩石惑星", color: 0xffffff, texture: tukiTextureUrl, description: "太陽に最も近く、太陽系で最小の惑星です。" },
     { name: "金星", distance: 0.723, radius: 0.95, period: 0.615, inclination: 3.4, type: "岩石惑星", color: 0xffcc66, texture: marbleTextureUrl, description: "厚い二酸化炭素の大気に覆われた、太陽系で最も高温の惑星です。" },
     { name: "地球", distance: 1, radius: 1, period: 1, inclination: 0, type: "岩石惑星", color: 0x3366ff, texture: nightSkyTextureUrl, description: "液体の水と生命が存在する、私たちの故郷です。" },
     { name: "火星", distance: 1.524, radius: 0.53, period: 1.881, inclination: 1.85, type: "岩石惑星", color: 0xcc3300, texture: rockTextureUrl, description: "酸化鉄によって赤く見える、探査が進められている惑星です。" },
     { name: "木星", distance: 5.203, radius: 11.2, period: 11.862, inclination: 1.3, type: "ガス惑星", color: 0xcc9966, texture: marbleTextureUrl, description: "太陽系最大の惑星で、大赤斑という巨大な嵐があります。" },
-    { name: "土星", distance: 9.537, radius: 9.45, period: 29.457, inclination: 2.5, type: "ガス惑星", color: 0xd8c28a, texture: marbleTextureUrl, description: "氷と岩の粒からなる、太陽系で最も目立つ環を持つ惑星です。" },
+    { name: "土星", distance: 9.537, radius: 9.45, period: 29.457, inclination: 2.5, type: "ガス惑星", color: 0xd8c28a, texture: tukiTextureUrl, description: "氷と岩の粒からなる、太陽系で最も目立つ環を持つ惑星です。" },
     { name: "天王星", distance: 19.19, radius: 4.01, period: 84.017, inclination: 0.8, type: "氷惑星", color: 0x66ffff, texture: onyxTextureUrl, description: "自転軸が大きく傾き、横倒しのように自転する氷惑星です。" },
-    { name: "海王星", distance: 30.07, radius: 3.88, period: 164.8, inclination: 1.8, type: "氷惑星", color: 0x3333ff, texture: onyxTextureUrl, description: "太陽から最も遠い、強い風が吹く青い氷惑星です。" }
+    { name: "海王星", distance: 30.07, radius: 3.88, period: 164.8, inclination: 1.8, type: "氷惑星", color: 0x3333ff, texture: tukiTextureUrl, description: "太陽から最も遠い、強い風が吹く青い氷惑星です。" }
 ];
 
 const distanceScale = 2.8;
+const minimumOrbitOffset = 5;
 const planetRadiusScale = 0.28;
 let simulationYearsPerSecond = 2;
 
@@ -1129,7 +987,7 @@ const textureLoader = new THREE.TextureLoader();
 
 planetData.forEach((data) => {
 
-    const orbitRadius = data.distance * distanceScale;
+    const orbitRadius = minimumOrbitOffset + data.distance * distanceScale;
 
     const orbitGeometry =
         new THREE.RingGeometry(
@@ -1167,7 +1025,7 @@ planetData.forEach((data) => {
 planetData.forEach((data) => {
 
     const planetName = data.name;
-    const distance = data.distance * distanceScale;
+    const distance = minimumOrbitOffset + data.distance * distanceScale;
     const texture = textureLoader.load(data.texture);
     texture.colorSpace = THREE.SRGBColorSpace;
 
@@ -1446,7 +1304,7 @@ renderer.domElement.addEventListener(
         // true にすることで土星のリングなども判定対象にする
         const intersects =
             raycaster.intersectObjects(
-                [...clickableBodies,...languageStars,...productCards,programGalaxyCore,programWormhole,futureProgramWormhole],
+                clickableBodies,
                 true
             );
 
@@ -1465,12 +1323,7 @@ renderer.domElement.addEventListener(
                 !selectedObject.userData.name &&
                 !selectedObject.userData.isWormhole &&
                 !selectedObject.userData.isGalaxyWormhole &&
-                !selectedObject.userData.isFutureWormhole &&
-                !selectedObject.userData.isProgramWormhole &&
-                !selectedObject.userData.isFutureProgramWormhole &&
-                !selectedObject.userData.isProgramGalaxyCore &&
-                !selectedObject.userData.isLanguageStar &&
-                !selectedObject.userData.isProductCard
+                !selectedObject.userData.isFutureWormhole
             ) {
                 selectedObject =
                     selectedObject.parent;
@@ -1496,11 +1349,6 @@ renderer.domElement.addEventListener(
                 return;
             }
 
-            if(selectedObject.userData.isFutureProgramWormhole){travelThroughWormhole(programGalaxy,115,selectedObject);return;}
-            if(selectedObject.userData.isProgramWormhole){travelThroughWormhole(futureGalaxy,105,selectedObject);return;}
-            if(selectedObject.userData.isLanguageStar){selectLanguageStar(selectedObject);return;}
-            if(selectedObject.userData.isProductCard){showProductDetail(selectedObject.userData.productName);return;}
-            if(selectedObject.userData.isProgramGalaxyCore){showProgramStatus();return;}
             const selectedPlanet =
                 selectedObject;
 
@@ -1665,21 +1513,6 @@ function animate() {
             0.65 + Math.sin(elapsedSeconds * 2.2 + index) * 0.2;
     });
 
-    languageLabels.forEach(label=>label.quaternion.copy(camera.quaternion));
-    productCards.forEach(card=>card.quaternion.copy(camera.quaternion));
-    if(programTransition){
-        programTransition.elapsed+=deltaSeconds;
-        const progress=Math.min(programTransition.elapsed/programTransition.duration,1);
-        if(progress<.45){
-            const fade=1-progress/.45;
-            programTransition.outgoing.forEach(object=>{const target=object.userData.targetScale||new THREE.Vector3(1,1,1);object.scale.copy(target).multiplyScalar(Math.max(.06,fade));if(object.material)object.material.opacity=fade});
-        }else{
-            if(!programTransition.built){programTransition.build();programTransition.built=true}
-            const appear=Math.min((progress-.45)/.55,1);
-            [...languageStars,...languageLabels,...productCards].forEach(object=>{const target=object.userData.targetScale||new THREE.Vector3(1,1,1);object.scale.copy(target).multiplyScalar(.06+.94*appear);if(object.material)object.material.opacity=appear});
-        }
-        if(progress>=1)programTransition=null;
-    }
     wormhole.rotation.y += deltaSeconds * 0.08;
     wormhole.rotation.z -= deltaSeconds * 0.04;
     wormholeDisk.rotation.z += deltaSeconds * 0.6;
