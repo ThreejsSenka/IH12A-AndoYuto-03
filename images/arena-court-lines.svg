@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 900" width="100%" height="100%" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <!-- 下部フェードアウト用マスク（下に向かって完全に透明化し、3Dアリーナ光柱へ100%シームレス接続） -->
+    <linearGradient id="courtLineFadeMask" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.9" />
+      <stop offset="45%" stop-color="#ffffff" stop-opacity="0.85" />
+      <stop offset="68%" stop-color="#ffffff" stop-opacity="0.35" />
+      <stop offset="85%" stop-color="#ffffff" stop-opacity="0.08" />
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+    </linearGradient>
+    <mask id="courtLineMask">
+      <rect x="0" y="0" width="1440" height="900" fill="url(#courtLineFadeMask)" />
+    </mask>
+
+    <!-- ルミナスシアンのネオンコートライン -->
+    <linearGradient id="courtCyanGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#5BC4F5" stop-opacity="0.65" />
+      <stop offset="40%" stop-color="#38B6F0" stop-opacity="0.45" />
+      <stop offset="80%" stop-color="#12638F" stop-opacity="0.20" />
+      <stop offset="100%" stop-color="#0B3F5E" stop-opacity="0.0" />
+    </linearGradient>
+
+    <!-- エナジーゴールドのネオンコートライン -->
+    <linearGradient id="courtGoldGrad" x1="1" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FEC838" stop-opacity="0.70" />
+      <stop offset="35%" stop-color="#FFA502" stop-opacity="0.50" />
+      <stop offset="80%" stop-color="#FF6B4A" stop-opacity="0.25" />
+      <stop offset="100%" stop-color="#FFA502" stop-opacity="0.0" />
+    </linearGradient>
+  </defs>
+
+  <g mask="url(#courtLineMask)" fill="none" stroke-linecap="round">
+    <!-- =========================================================
+         【シアン・ホワイト系コートライン】（常に表示）
+         ========================================================= -->
+    <!-- 1. メイン・アリーナセンターサークル -->
+    <ellipse cx="720" cy="520" rx="520" ry="220" stroke="url(#courtCyanGrad)" stroke-width="1.8" opacity="0.65" />
+    <ellipse cx="720" cy="520" rx="160" ry="70" stroke="url(#courtCyanGrad)" stroke-width="2.0" opacity="0.75" />
+
+    <!-- 2. コート交差パースペクティブ・ガイドライン -->
+    <line x1="-80" y1="160" x2="820" y2="820" stroke="url(#courtCyanGrad)" stroke-width="1.5" opacity="0.45" />
+    <line x1="-40" y1="80" x2="680" y2="680" stroke="url(#courtCyanGrad)" stroke-width="1.0" opacity="0.25" stroke-dasharray="6 8" />
+
+    <!-- 3. 左翼スリーポイント・アーク ＆ フリースローエリア -->
+    <path d="M 20 360 C 260 330, 360 480, 220 710" stroke="url(#courtCyanGrad)" stroke-width="1.2" stroke-dasharray="6 8" opacity="0.45" />
+    <polyline points="100,180 320,380 440,320" stroke="url(#courtCyanGrad)" stroke-width="1.4" opacity="0.38" />
+
+    <!-- 4. 右翼ランウェイ・トラックカーブ -->
+    <path d="M 1460 280 C 1160 250, 1040 450, 1200 750" stroke="url(#courtCyanGrad)" stroke-width="2.0" opacity="0.55" />
+
+    <!-- 5. シアン系ノードマーカー -->
+    <circle cx="260" cy="760" r="3.5" fill="#38B6F0" opacity="0.80" />
+    <circle cx="320" cy="380" r="3.0" fill="#5BC4F5" opacity="0.75" />
+
+    <!-- =========================================================
+         【一時非表示: 黄色の線・ゴールドライン】
+         ※ 後で戻すときは style="display: none;" を削除するか、
+            style="display: inline;" に変更するだけで100%元に戻せます。
+         ========================================================= -->
+    <g id="courtGoldLinesGroup" class="court-gold-lines" style="display: none;">
+      <!-- センターサークル・ゴールド楕円 -->
+      <ellipse cx="720" cy="520" rx="380" ry="160" stroke="url(#courtGoldGrad)" stroke-width="1.4" stroke-dasharray="10 14" opacity="0.55" />
+
+      <!-- 交差ガイドライン・ゴールド -->
+      <line x1="1520" y1="140" x2="620" y2="820" stroke="url(#courtGoldGrad)" stroke-width="1.5" opacity="0.50" />
+      <line x1="1480" y1="60" x2="760" y2="680" stroke="url(#courtGoldGrad)" stroke-width="1.0" opacity="0.30" stroke-dasharray="6 8" />
+
+      <!-- 左翼スリーポイント・ゴールドアーク -->
+      <path d="M -20 320 C 300 280, 420 460, 260 760" stroke="url(#courtGoldGrad)" stroke-width="2.0" opacity="0.60" />
+
+      <!-- 右翼トラックカーブ・ゴールド -->
+      <path d="M 1420 320 C 1180 290, 1080 440, 1220 700" stroke="url(#courtGoldGrad)" stroke-width="1.2" stroke-dasharray="8 10" opacity="0.50" />
+      <line x1="1380" y1="180" x2="1080" y2="440" stroke="url(#courtGoldGrad)" stroke-width="1.4" opacity="0.35" />
+
+      <!-- センター縦断ゴールドライン -->
+      <line x1="720" y1="20" x2="720" y2="820" stroke="url(#courtGoldGrad)" stroke-width="1.5" stroke-dasharray="14 10" opacity="0.35" />
+
+      <!-- ゴールド系ノードマーカー -->
+      <circle cx="720" cy="520" r="4.5" fill="#FEC838" opacity="0.85" />
+      <circle cx="1200" cy="750" r="3.5" fill="#FEC838" opacity="0.80" />
+      <circle cx="1080" cy="440" r="3.0" fill="#FFA502" opacity="0.75" />
+    </g>
+  </g>
+</svg>

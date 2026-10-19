@@ -1,0 +1,207 @@
+@charset "utf-8";
+
+/* =========================================================
+   RE:CREATION - 企画案A：シアン・オーシャン・イマーシブ
+   走れ！〇人〇脚！ (ninnkyaku.css)
+   メインカラー: RGB(44, 159, 216) (#2C9FD8) 全面没入型
+   ========================================================= */
+
+.ninnkyaku-main {
+  max-width: 1200px;
+  width: 92%;
+  margin: 4rem auto 8rem;
+}
+
+/* タイトルステージ (半透明グラス) */
+.ninnkyaku-title {
+  text-align: center;
+  background: rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 2.5px solid rgba(255, 255, 255, 0.45);
+  border-radius: 24px;
+  padding: 3.5rem 2rem;
+  box-shadow: 0 14px 40px rgba(5, 30, 48, 0.35);
+  margin-bottom: 4rem;
+}
+
+.ninnkyaku-title h2 {
+  font-size: clamp(2.6rem, 5.5vw, 4.2rem);
+  color: #FFFFFF;
+  font-weight: 900;
+  text-shadow: 0 3px 15px rgba(0, 0, 0, 0.4);
+}
+
+.ninnkyaku-title h4 {
+  font-size: 1.35rem;
+  margin-top: 1.2rem;
+  color: #FFA502;
+  font-weight: 900;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* 中間タイトル */
+.kyougiShousai-title h3,
+.syuugou-title h3 {
+  font-size: 2.2rem;
+  color: #FFA502;
+  text-align: center;
+  margin: 4rem 0 2rem;
+  font-weight: 900;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  letter-spacing: 1.5px;
+}
+
+/* 画像フレーム */
+.ninnkyaku-img,
+.ninnkyakubasyo-img {
+  margin: 0 auto 5rem;
+  width: min(1000px, 95%);
+  height: 60vh;
+  min-height: 420px;
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-color: rgba(255, 255, 255, 0.95);
+  border: 3px solid rgba(255, 255, 255, 0.7);
+  border-radius: 24px;
+  box-shadow: 0 16px 45px rgba(5, 30, 48, 0.45), 0 0 25px rgba(56, 182, 240, 0.3);
+}
+
+.ninnkyaku-img {
+  background-image: url(../images/about-ninnkyaku.jpg);
+}
+
+.ninnkyakubasyo-img {
+  background-image: url(../images/place-ninnkyaku.jpg);
+}
+
+/* 競技詳細コンテナ (Frosted Cyan Glass) */
+.kyougiShousai-container {
+  width: min(1000px, 95%);
+  padding: 4.5rem 4rem;
+  border: 2.5px solid rgba(255, 255, 255, 0.45);
+  border-top: 5px solid #FFA502;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  box-shadow: 0 16px 45px rgba(5, 30, 48, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.25);
+  margin: 0 auto;
+  color: #FFFFFF;
+}
+
+.kyougiShousai-container h3 {
+  font-size: 1.85rem;
+  color: #FFA502;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.35);
+  padding-bottom: 0.6rem;
+  margin-top: 3.5rem;
+  margin-bottom: 1.5rem;
+  font-weight: 900;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.kyougiShousai-container > div:first-child h3 {
+  margin-top: 0;
+}
+
+.kyougiShousai-container h4,
+.kyougiShousai-container li {
+  font-size: 1.15rem;
+  line-height: 2.2;
+  color: #FFFFFF;
+  font-weight: 700;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+.kyougiShousai-container ul {
+  padding-left: 1.2rem;
+  margin: 1rem 0;
+}
+
+.kyougiShousai-container li {
+  margin-bottom: 8px;
+}
+
+/* 対戦表リンクボタン */
+.leagueTable-link {
+  text-decoration: none;
+  display: block;
+}
+
+.league-title {
+  margin: 3.5rem auto 2.5rem;
+  width: min(440px, 92%);
+  padding: 1.3rem 2rem;
+  background: linear-gradient(135deg, #FFA502 0%, #FF6B4A 100%);
+  border-radius: 35px;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 8px 25px rgba(255, 165, 2, 0.5);
+  cursor: pointer;
+  transition: all var(--trans-spring);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.league-title h3 {
+  color: #FFFFFF !important;
+  font-weight: 900;
+  font-size: 1.35rem;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.league-title:hover {
+  transform: translateY(-4px) scale(1.03);
+  box-shadow: 0 14px 35px rgba(255, 165, 2, 0.7);
+  filter: brightness(1.08);
+}
+
+@media screen and (max-width: 680px) {
+  .kyougi-title, .relay-title, .dojji-title, .tunahiki-title, .kamihikouki-title, .ninnkyaku-title {
+    padding: 1.6rem 1.0rem;
+    margin-bottom: 2rem;
+    border-radius: 16px;
+  }
+  .kyougi-title h2, .relay-title h2, .dojji-title h2, .tunahiki-title h2, .kamihikouki-title h2, .ninnkyaku-title h2 {
+    font-size: clamp(1.5rem, 5.5vw, 1.8rem);
+  }
+  .kyougiShousai-container {
+    padding: 2.0rem 1.2rem;
+    border-radius: 16px;
+    width: 100%;
+  }
+  .kyougiShousai-container h3 {
+    font-size: 1.25rem;
+    margin-top: 2rem;
+    margin-bottom: 0.8rem;
+  }
+  .kyougiShousai-container h4, .kyougiShousai-container li {
+    font-size: 0.94rem;
+    line-height: 1.75;
+  }
+  .kyougiShousai-container ul {
+    padding-left: 0.8rem;
+    margin: 0.6rem 0;
+  }
+  .league-title {
+    width: 95%;
+    padding: 12px 20px;
+    margin: 2.5rem auto 1.8rem;
+    border-radius: 30px;
+  }
+  .league-title h3 {
+    font-size: 1.05rem !important;
+  }
+  .relay-img, .relaybasyo-img, .dojji-img, .tunahiki-img, .kamihikouki-img, .ninnkyaku-img {
+    height: 35vh;
+    min-height: 220px;
+    border-radius: 16px;
+  }
+}

@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="80" height="40" viewBox="0 0 80 40">
+  <defs>
+    <!-- ゴールドの光彩グラデーション -->
+    <linearGradient id="goldGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FEC838" stop-opacity="0.32" />
+      <stop offset="60%" stop-color="#FFA502" stop-opacity="0.14" />
+      <stop offset="100%" stop-color="#38B6F0" stop-opacity="0.04" />
+    </linearGradient>
+
+    <!-- シアンブルーの微細グラデーション -->
+    <linearGradient id="cyanStroke" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#5BC4F5" stop-opacity="0.25" />
+      <stop offset="100%" stop-color="#12638F" stop-opacity="0.08" />
+    </linearGradient>
+  </defs>
+
+  <!-- 1. メインウロコアーチ（下段中央） -->
+  <path d="M 0,40 A 40,40 0 0,1 80,40" fill="url(#goldGlow)" stroke="#FEC838" stroke-width="1.2" stroke-opacity="0.30" />
+  <path d="M 12,40 A 28,28 0 0,1 68,40" fill="none" stroke="#38B6F0" stroke-width="0.8" stroke-opacity="0.20" stroke-dasharray="2 3" />
+
+  <!-- 2. インターロックウロコアーチ（中段左右・千鳥配置） -->
+  <path d="M -40,20 A 40,40 0 0,1 40,20" fill="url(#goldGlow)" stroke="#FEC838" stroke-width="1.2" stroke-opacity="0.25" />
+  <path d="M -28,20 A 28,28 0 0,1 28,20" fill="none" stroke="#38B6F0" stroke-width="0.8" stroke-opacity="0.16" stroke-dasharray="2 3" />
+
+  <path d="M 40,20 A 40,40 0 0,1 120,20" fill="url(#goldGlow)" stroke="#FEC838" stroke-width="1.2" stroke-opacity="0.25" />
+  <path d="M 52,20 A 28,28 0 0,1 108,20" fill="none" stroke="#38B6F0" stroke-width="0.8" stroke-opacity="0.16" stroke-dasharray="2 3" />
+
+  <!-- 3. 最上段ウロコアーチ（タイリング境界用） -->
+  <path d="M 0,0 A 40,40 0 0,1 80,0" fill="none" stroke="#FEC838" stroke-width="1.2" stroke-opacity="0.30" />
+  <path d="M 12,0 A 28,28 0 0,1 68,0" fill="none" stroke="#38B6F0" stroke-width="0.8" stroke-opacity="0.20" stroke-dasharray="2 3" />
+
+  <!-- 4. 幾何学アクセントドット（光の結節点） -->
+  <circle cx="40" cy="20" r="2.2" fill="#FEC838" fill-opacity="0.45" />
+  <circle cx="0" cy="40" r="1.8" fill="#38B6F0" fill-opacity="0.35" />
+  <circle cx="80" cy="40" r="1.8" fill="#38B6F0" fill-opacity="0.35" />
+  <circle cx="40" cy="0" r="2.2" fill="#FEC838" fill-opacity="0.45" />
+</svg>

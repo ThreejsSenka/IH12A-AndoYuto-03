@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="80" viewBox="0 0 64 80">
+  <defs>
+    <!-- ゴールドのウロコ箔グラデーション -->
+    <linearGradient id="foilGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FEC838" stop-opacity="0.22" />
+      <stop offset="50%" stop-color="#FFA502" stop-opacity="0.10" />
+      <stop offset="100%" stop-color="#38B6F0" stop-opacity="0.02" />
+    </linearGradient>
+
+    <!-- シアンのトラス反射グラデーション -->
+    <linearGradient id="trussCyan" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#38B6F0" stop-opacity="0.18" />
+      <stop offset="100%" stop-color="#0288D1" stop-opacity="0.04" />
+    </linearGradient>
+  </defs>
+
+  <!-- 1. アリーナ・ダイヤモンドトラス格子（菱形幾何学フレーム） -->
+  <!-- 中央ダイヤモンド (32,0)-(64,40)-(32,80)-(0,40) -->
+  <polygon points="32,0 64,40 32,80 0,40" fill="url(#foilGold)" stroke="#FEC838" stroke-width="1.1" stroke-opacity="0.26" />
+
+  <!-- 菱形内部のトラス補強Xビーム（細線） -->
+  <line x1="32" y1="8" x2="32" y2="72" stroke="#38B6F0" stroke-width="0.75" stroke-opacity="0.18" stroke-dasharray="2 3" />
+  <line x1="8" y1="40" x2="56" y2="40" stroke="#38B6F0" stroke-width="0.75" stroke-opacity="0.18" stroke-dasharray="2 3" />
+
+  <!-- 四隅の対向ダイヤモンド（タイリング用） -->
+  <polygon points="0,0 32,0 0,40" fill="url(#trussCyan)" stroke="#38B6F0" stroke-width="0.9" stroke-opacity="0.18" />
+  <polygon points="64,0 32,0 64,40" fill="url(#trussCyan)" stroke="#38B6F0" stroke-width="0.9" stroke-opacity="0.18" />
+  <polygon points="0,80 32,80 0,40" fill="url(#trussCyan)" stroke="#38B6F0" stroke-width="0.9" stroke-opacity="0.18" />
+  <polygon points="64,80 32,80 64,40" fill="url(#trussCyan)" stroke="#38B6F0" stroke-width="0.9" stroke-opacity="0.18" />
+
+  <!-- 2. インナースケール箔（内包された小さな幾何学ダイヤモンド） -->
+  <polygon points="32,18 50,40 32,62 14,40" fill="none" stroke="#FEC838" stroke-width="0.8" stroke-opacity="0.18" />
+
+  <!-- 3. スタジアム・リベット鋲（光のアクセントノード） -->
+  <circle cx="32" cy="0" r="2.0" fill="#FEC838" fill-opacity="0.45" />
+  <circle cx="64" cy="40" r="1.8" fill="#38B6F0" fill-opacity="0.40" />
+  <circle cx="0" cy="40" r="1.8" fill="#38B6F0" fill-opacity="0.40" />
+  <circle cx="32" cy="80" r="2.0" fill="#FEC838" fill-opacity="0.45" />
+  <circle cx="32" cy="40" r="2.2" fill="#FFFFFF" fill-opacity="0.50" />
+</svg>
