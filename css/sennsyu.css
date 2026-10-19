@@ -1,0 +1,307 @@
+@charset "utf-8";
+
+/* =========================================================
+   RE:CREATION 2026 - 出場選手 (sennsyu.css)
+   【ゾーンA: 去年の魚のうろこ背景 × ロイヤルゴールド】
+   アコーディオン開閉エラー完全修正 ＆ タップしやすいタイルボタン
+   ========================================================= */
+
+body {
+  background-color: #071E30 !important;
+  background-image:
+    url("../images/arena-court-lines.svg"),
+    linear-gradient(135deg, rgba(56, 182, 240, 0.22) 0%, rgba(44, 159, 216, 0.08) 35%, transparent 65%),
+    linear-gradient(225deg, rgba(254, 200, 56, 0.18) 0%, rgba(255, 165, 2, 0.05) 30%, transparent 60%),
+    linear-gradient(180deg, #071E30 0%, #0D3E5E 35%, #125A82 65%, #082840 100%) !important;
+  background-repeat: no-repeat !important;
+  background-position: center top, center, center, center !important;
+  background-size: cover, 100% 100%, 100% 100%, 100% 100% !important;
+  background-attachment: fixed !important;
+}
+
+.sennsyu-main {
+  max-width: 1200px;
+  width: 92%;
+  margin: 3.5rem auto 7rem;
+}
+
+.breadcrumb {
+  max-width: 1200px;
+  width: 92%;
+  margin: 1.5rem auto 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.92rem;
+  color: var(--text-muted);
+}
+
+.breadcrumb a {
+  color: var(--color-accent);
+  transition: opacity 0.2s;
+}
+
+.breadcrumb a:hover {
+  opacity: 0.8;
+}
+
+.breadcrumb .sep {
+  opacity: 0.5;
+}
+
+.breadcrumb .current {
+  color: #FFFFFF;
+  font-weight: 700;
+}
+
+/* タイトルエリア */
+.sennsyu-title {
+  text-align: center;
+  background: rgba(11, 63, 94, 0.72);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1.5px solid rgba(254, 200, 56, 0.5);
+  border-radius: 24px;
+  padding: 3rem 2rem;
+  box-shadow: 0 14px 40px rgba(5, 30, 48, 0.45), 0 0 25px rgba(254, 200, 56, 0.2);
+  margin-bottom: 3.5rem;
+}
+
+.sennsyu-title h2 {
+  color: #FEC838;
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 5vw, 3.8rem);
+  font-weight: 900;
+  letter-spacing: 2px;
+  text-shadow: 0 4px 18px rgba(0, 0, 0, 0.6);
+}
+
+.sennsyu-text-box h4 {
+  margin-top: 1.2rem;
+  font-size: 1.15rem;
+  text-align: center;
+  color: #E2EEFB;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+/* アコーディオン全体 */
+.accordion {
+  width: min(960px, 95%);
+  display: flex;
+  flex-direction: column;
+  gap: 1.8rem;
+  margin: 0 auto;
+}
+
+.item {
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1.5px solid rgba(254, 200, 56, 0.4);
+  background: rgba(11, 63, 94, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 10px 30px rgba(5, 30, 48, 0.4);
+  transition: border-color var(--trans-smooth), box-shadow var(--trans-smooth);
+}
+
+.item:hover {
+  border-color: rgba(254, 200, 56, 0.85);
+  box-shadow: 0 14px 40px rgba(5, 30, 48, 0.5), 0 0 20px rgba(254, 200, 56, 0.3);
+}
+
+/* アコーディオントリガー（見出し部） */
+.trigger {
+  display: flex;
+  flex-direction: column;
+  background: rgba(16, 90, 135, 0.9);
+  padding: 20px 28px;
+  color: #FFFFFF;
+  cursor: pointer;
+  position: relative;
+  width: 100%;
+  border-left: 6px solid #FEC838;
+  user-select: none;
+  transition: background 0.25s ease;
+}
+
+.trigger:hover {
+  background: rgba(22, 116, 166, 0.95);
+}
+
+.trigger .title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #FEC838;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  padding: 0.1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.trigger .subtitle {
+  font-size: 0.92rem;
+  font-weight: 600;
+  margin-top: 4px;
+  color: #D6E4F5;
+}
+
+/* 展開矢印アイコン */
+.trigger::before {
+  content: "";
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #FEC838;
+  position: absolute;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  transition: all 0.3s ease;
+}
+
+.trigger::after {
+  content: "";
+  position: absolute;
+  right: 34px;
+  top: 48%;
+  width: 9px;
+  height: 9px;
+  border-bottom: 2.5px solid #0B1736;
+  border-right: 2.5px solid #0B1736;
+  transform: translateY(-50%) rotate(45deg);
+  transition: transform 0.3s ease, top 0.3s ease;
+  pointer-events: none;
+}
+
+/* 開いたときの矢印回転 */
+.accordion input:checked + .trigger::before {
+  background: #FFFFFF;
+}
+
+.accordion input:checked + .trigger::after {
+  transform: translateY(-30%) rotate(-135deg);
+  border-color: #0B1736;
+}
+
+/* 展開パネル（アコーディオン本体: 閉じるエラー完全修復） */
+.panel {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  padding: 0 2.5rem;
+  background: rgba(8, 47, 73, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  transition: max-height 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease, padding 0.4s ease;
+}
+
+.accordion input:checked + .trigger + .panel {
+  max-height: 2500px;
+  opacity: 1;
+  padding: 2rem 2.5rem 2.5rem;
+  border-top: 1.5px solid rgba(254, 200, 56, 0.4);
+}
+
+.panel ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.panel li {
+  margin: 0;
+  padding: 0;
+}
+
+/* 各クラスボタン（指で押しやすいゴールドタイル調） */
+.panel a {
+  background: rgba(255, 255, 255, 0.95) !important;
+  color: #0B1736 !important;
+  border: 1.5px solid rgba(254, 200, 56, 0.8) !important;
+  border-radius: 10px !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3) !important;
+  font-family: var(--font-display) !important;
+  font-weight: 800 !important;
+  font-size: 1.02rem !important;
+  padding: 10px 20px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-decoration: none !important;
+  transition: all var(--trans-smooth) !important;
+  cursor: pointer;
+}
+
+.panel a:hover {
+  transform: translateY(-3px) scale(1.04) !important;
+  box-shadow: 0 8px 24px rgba(254, 200, 56, 0.5) !important;
+  background: #FEC838 !important;
+  border-color: #FEC838 !important;
+  color: #0B1736 !important;
+}
+
+.panel a:active {
+  transform: translateY(-1px) !important;
+}
+
+@media screen and (max-width: 768px) {
+  body {
+    background-size: min(100vw, 420px) auto, 100% 100%, 100% 100%, 100% 100% !important;
+    background-position: center 20px, center, center, center !important;
+    background-attachment: scroll !important;
+  }
+  .sennsyu-main {
+    width: 94%;
+    margin: 1.5rem auto 4.5rem;
+  }
+  .sennsyu-title {
+    padding: 1.6rem 1.0rem;
+    border-radius: 16px;
+    margin-bottom: 2rem;
+  }
+  .sennsyu-title h2 {
+    font-size: clamp(1.5rem, 5.5vw, 1.8rem);
+    letter-spacing: 1.5px;
+  }
+  .sennsyu-text-box h4 {
+    font-size: 0.92rem;
+    margin-top: 0.6rem;
+  }
+  .accordion {
+    width: 100%;
+    gap: 1.2rem;
+  }
+  .item {
+    border-radius: 14px;
+  }
+  .trigger {
+    padding: 14px 18px;
+  }
+  .trigger .title {
+    font-size: 1.15rem;
+  }
+  .trigger::before {
+    right: 14px;
+    width: 26px;
+    height: 26px;
+  }
+  .trigger::after {
+    right: 23px;
+  }
+  .accordion input:checked + .trigger + .panel {
+    padding: 1.2rem 1.0rem 1.4rem;
+  }
+  .panel a {
+    font-size: 0.88rem !important;
+    padding: 7px 12px !important;
+    border-radius: 8px !important;
+  }
+}

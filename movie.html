@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/common.css?v=20261016_3">
+  <link rel="stylesheet" href="css/movie.css?v=20261016_3">
+  <title>ムービー | RE:CREATION</title>
+  <script>
+    (function (d) {
+      var config = {
+        kitId: 'yon8bkv',
+        scriptTimeout: 3000,
+        async: true
+      },
+        h = d.documentElement, t = setTimeout(function () { h.className = h.className.replace(/\bwf-loading\b/g, "") + " wf-inactive"; }, config.scriptTimeout), tk = d.createElement("script"), f = false, s = d.getElementsByTagName("script")[0], a; h.className += " wf-loading"; tk.src = 'https://use.typekit.net/' + config.kitId + '.js'; tk.async = true; tk.onload = tk.onreadystatechange = function () { a = this.readyState; if (f || a && a != "complete" && a != "loaded") return; f = true; clearTimeout(t); try { Typekit.load(config) } catch (e) { } }; s.parentNode.insertBefore(tk, s)
+    })(document);
+        (function (d) {
+      var config = {
+        kitId: 'sqx3dfn',
+        scriptTimeout: 3000,
+        async: true
+      },
+        h = d.documentElement, t = setTimeout(function () { h.className = h.className.replace(/\bwf-loading\b/g, "") + " wf-inactive"; }, config.scriptTimeout), tk = d.createElement("script"), f = false, s = d.getElementsByTagName("script")[0], a; h.className += " wf-loading"; tk.src = 'https://use.typekit.net/' + config.kitId + '.js'; tk.async = true; tk.onload = tk.onreadystatechange = function () { a = this.readyState; if (f || a && a != "complete" && a != "loaded") return; f = true; clearTimeout(t); try { Typekit.load(config) } catch (e) { } }; s.parentNode.insertBefore(tk, s)
+    })(document);
+      (function(d) {
+    var config = {
+      kitId: 'knm1jcc',
+      scriptTimeout: 3000,
+      async: true
+    },
+    h=d.documentElement,t=setTimeout(function(){h.className=h.className.replace(/\bwf-loading\b/g,"")+" wf-inactive";},config.scriptTimeout),tk=d.createElement("script"),f=false,s=d.getElementsByTagName("script")[0],a;h.className+=" wf-loading";tk.src='https://use.typekit.net/'+config.kitId+'.js';tk.async=true;tk.onload=tk.onreadystatechange=function(){a=this.readyState;if(f||a&&a!="complete"&&a!="loaded")return;f=true;clearTimeout(t);try{Typekit.load(config)}catch(e){}};s.parentNode.insertBefore(tk,s)
+  })(document);
+  </script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body class="page-movie">
+
+  <!-- 3DアリーナCanvas（他ページと100%統一） -->
+  <canvas id="arena-grid-canvas"></canvas>
+  <canvas id="god-rays-canvas"></canvas>
+  <div class="skylight-ambient-glow"></div>
+  <div class="skylight-roof-strip"></div>
+
+  <div id="container">
+
+    <!-- GLOBAL FLOATING HEADER -->
+    <header id="header">
+      <div class="header-container">
+        
+        <div class="header-brand">
+          <a href="index.html">
+            <img src="images/title-text1.png" alt="RE:CREATION">
+            <span class="brand-badge">2026</span>
+          </a>
+        </div>
+
+        <nav class="desktop-nav">
+          <ul>
+            <li><a href="index.html">トップ</a></li>
+            <li><a href="sennsyu.html">出場選手</a></li>
+            <li><a href="kyougi.html">競技一覧</a></li>
+            <li><a href="basyo.html">集合場所</a></li>
+            <li><a href="cosplay.html">コスプレ大会</a></li>
+            <li><a href="ranking.html">ランキング</a></li>
+          </ul>
+        </nav>
+
+        <div class="header-actions">
+          <div class="hamburger-box" aria-label="メニューを開く">
+            <div class="hamburger">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </header>
+
+    <!-- Mobile Navigation Drawer -->
+    <nav class="mobile-nav-drawer">
+      <ul>
+        <li><a href="index.html"><span><i data-lucide="home"></i> トップ</span> <i data-lucide="chevron-right"></i></a></li>
+        <li><a href="sennsyu.html"><span><i data-lucide="users"></i> 出場選手</span> <i data-lucide="chevron-right"></i></a></li>
+        <li><a href="kyougi.html"><span><i data-lucide="trophy"></i> 競技一覧</span> <i data-lucide="chevron-right"></i></a></li>
+        <li><a href="basyo.html"><span><i data-lucide="map-pin"></i> 集合場所・座席</span> <i data-lucide="chevron-right"></i></a></li>
+        <li><a href="cosplay.html"><span><i data-lucide="sparkles"></i> コスプレ大会</span> <i data-lucide="chevron-right"></i></a></li>
+        <li><a href="ranking.html"><span><i data-lucide="medal"></i> ランキング</span> <i data-lucide="chevron-right"></i></a></li>
+        <li><a href="appli.html"><span><i data-lucide="bell"></i> 呼び出しアプリ</span> <i data-lucide="chevron-right"></i></a></li>
+        <li><a href="cyuui.html"><span><i data-lucide="shield-alert"></i> 注意事項</span> <i data-lucide="chevron-right"></i></a></li>
+        <li><a href="situmonn.html"><span><i data-lucide="help-circle"></i> Q&A (よくある質問)</span> <i data-lucide="chevron-right"></i></a></li>
+        <li><a href="movie.html"><span><i data-lucide="film"></i> ムービー紹介</span> <i data-lucide="chevron-right"></i></a></li>
+      </ul>
+    </nav>
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+      <a href="index.html"><i data-lucide="home" style="width: 14px; height: 14px;"></i> トップ</a>
+      <span class="sep">/</span>
+      <span class="current">ムービー</span>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main movie-main">
+
+      <section class="movie-section">
+        <!-- 原作完全準拠タイトル -->
+        <div class="section-title ">
+          <h2>ムービー</h2>
+          <h3>レ・クリエイションＯＰ</h3>
+        </div>
+
+        <!-- =========================================================
+             アリーナ特設 3Dジャイアントビジョン（大型LEDジャンボトロン）
+             ※完全汎用設計：動画ファイルを後から差し替えても自動で完璧にフィットします
+             ========================================================= -->
+        <div class="jumbotron-container">
+          <!-- 天井リギングケーブル（スチール吊り下げワイヤー＆上部トラス） -->
+          <div class="jumbotron-rigging">
+            <div class="rigging-cable cable-left"></div>
+            <div class="rigging-cable cable-center-left"></div>
+            <div class="rigging-cable cable-center-right"></div>
+            <div class="rigging-cable cable-right"></div>
+            <div class="rigging-truss-bar"></div>
+          </div>
+
+          <!-- ジャンボトロン本体フレーム -->
+          <div class="jumbotron-frame">
+            <!-- ビジョン上部ステータスバー -->
+            <div class="jumbotron-top-bar">
+              <div class="vision-status">
+                <span class="status-indicator-dot"></span>
+                <span class="vision-id">ARENA CENTER-HUNG JUMBOTRON // FEED-01</span>
+              </div>
+              <div class="vision-meta">
+                <span class="meta-tag">DIRECT FEED</span>
+              </div>
+            </div>
+
+            <!-- スクリーンエリア（どんな比率・解像度の動画でも美しく自動フィット） -->
+            <div class="jumbotron-screen-wrap" id="jumbotronScreen">
+              <!-- 動画要素（後から動画ファイルを差し替えても自動適応） -->
+              <video id="arenaVideoPlayer" src="./movie/op-movie.mp4" playsinline preload="metadata"></video>
+
+              <!-- 大型センタープレイボタン（待機時・一時停止時にスタイリッシュに表示） -->
+              <button class="center-play-btn" id="centerPlayBtn" aria-label="再生">
+                <i data-lucide="play"></i>
+              </button>
+
+              <!-- プロ仕様カスタム・シネマコントローラー -->
+              <div class="jumbotron-controls" id="jumbotronControls">
+                <!-- プログレスシークバー -->
+                <div class="controls-timeline-wrap" id="timelineWrap">
+                  <div class="timeline-bar" id="timelineBar">
+                    <div class="timeline-buffered" id="timelineBuffered"></div>
+                    <div class="timeline-progress" id="timelineProgress"></div>
+                  </div>
+                </div>
+
+                <div class="controls-bar">
+                  <!-- 再生/一時停止 ＆ タイムコード -->
+                  <div class="controls-left">
+                    <button class="ctrl-btn" id="playPauseBtn" aria-label="再生/一時停止">
+                      <i data-lucide="play" id="playIcon"></i>
+                    </button>
+                    <div class="time-display">
+                      <span id="currentTime">0:00</span> <span class="time-sep">/</span> <span id="durationTime">0:00</span>
+                    </div>
+                  </div>
+
+                  <!-- 音量・フルスクリーン -->
+                  <div class="controls-right">
+                    <div class="volume-wrap">
+                      <button class="ctrl-btn" id="volumeBtn" aria-label="ミュート切替">
+                        <i data-lucide="volume-2" id="volumeIcon"></i>
+                      </button>
+                      <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.05" value="1" aria-label="音量調節">
+                    </div>
+                    <button class="ctrl-btn" id="fullscreenBtn" aria-label="全画面表示">
+                      <i data-lucide="maximize" id="fullscreenIcon"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- コーナーブラケット装飾（スタジアムハードウェア演出） -->
+            <div class="corner-bracket corner-tl"></div>
+            <div class="corner-bracket corner-tr"></div>
+            <div class="corner-bracket corner-bl"></div>
+            <div class="corner-bracket corner-br"></div>
+          </div>
+
+          <!-- ビジョン下部のアリーナ床面アンビエント反射グロー -->
+          <div class="jumbotron-ambient-glow" id="jumbotronAmbientGlow"></div>
+        </div>
+      </section>
+
+    </main>
+
+        <!-- Floating Back to Top Button -->
+    <button id="backToTop" class="back-to-top" title="トップへ戻る">▲</button>
+
+    <!-- Footer -->
+    <footer id="footer">
+      <div class="footer-inner">
+        <div class="header-brand">
+          <img src="images/title-text1.png" alt="RE:CREATION">
+        </div>
+        <nav class="footer-nav">
+          <a href="index.html">ホーム</a>
+          <a href="sennsyu.html">出場選手</a>
+          <a href="kyougi.html">競技一覧</a>
+          <a href="basyo.html">集合場所</a>
+          <a href="cosplay.html">コスプレ大会</a>
+          <a href="ranking.html">ランキング</a>
+          <a href="appli.html">呼び出しアプリ</a>
+          <a href="cyuui.html">注意事項</a>
+          <a href="situmonn.html">Q&A</a>
+          <a href="movie.html">ムービー</a>
+        </nav>
+        <p class="footer-copy">©2026 RE:CREATION STAFF. ALL RIGHTS RESERVED.</p>
+      </div>
+    </footer>
+
+  </div> <!--container-->
+
+  <script>if(window.lucide){lucide.createIcons();}</script>
+</body>
+
+<script src="js/jQuery-v3.7.1.js?v=20261016_3"></script>
+<script src="js/script.js?v=20261016_3"></script>
+
+</html>

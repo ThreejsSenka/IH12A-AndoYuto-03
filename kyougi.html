@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/common.css?v=20261016_3">
+  <link rel="stylesheet" href="css/kyougi.css?v=20261016_3">
+  <title>競技一覧 | RE:CREATION</title>
+  <script>
+    (function (d) {
+      var config = {
+        kitId: 'yon8bkv',
+        scriptTimeout: 3000,
+        async: true
+      },
+        h = d.documentElement, t = setTimeout(function () { h.className = h.className.replace(/\bwf-loading\b/g, "") + " wf-inactive"; }, config.scriptTimeout), tk = d.createElement("script"), f = false, s = d.getElementsByTagName("script")[0], a; h.className += " wf-loading"; tk.src = 'https://use.typekit.net/' + config.kitId + '.js'; tk.async = true; tk.onload = tk.onreadystatechange = function () { a = this.readyState; if (f || a && a != "complete" && a != "loaded") return; f = true; clearTimeout(t); try { Typekit.load(config) } catch (e) { } }; s.parentNode.insertBefore(tk, s)
+    })(document);
+        (function (d) {
+      var config = {
+        kitId: 'sqx3dfn',
+        scriptTimeout: 3000,
+        async: true
+      },
+        h = d.documentElement, t = setTimeout(function () { h.className = h.className.replace(/\bwf-loading\b/g, "") + " wf-inactive"; }, config.scriptTimeout), tk = d.createElement("script"), f = false, s = d.getElementsByTagName("script")[0], a; h.className += " wf-loading"; tk.src = 'https://use.typekit.net/' + config.kitId + '.js'; tk.async = true; tk.onload = tk.onreadystatechange = function () { a = this.readyState; if (f || a && a != "complete" && a != "loaded") return; f = true; clearTimeout(t); try { Typekit.load(config) } catch (e) { } }; s.parentNode.insertBefore(tk, s)
+    })(document);
+      (function(d) {
+    var config = {
+      kitId: 'knm1jcc',
+      scriptTimeout: 3000,
+      async: true
+    },
+    h=d.documentElement,t=setTimeout(function(){h.className=h.className.replace(/\bwf-loading\b/g,"")+" wf-inactive";},config.scriptTimeout),tk=d.createElement("script"),f=false,s=d.getElementsByTagName("script")[0],a;h.className+=" wf-loading";tk.src='https://use.typekit.net/'+config.kitId+'.js';tk.async=true;tk.onload=tk.onreadystatechange=function(){a=this.readyState;if(f||a&&a!="complete"&&a!="loaded")return;f=true;clearTimeout(t);try{Typekit.load(config)}catch(e){}};s.parentNode.insertBefore(tk,s)
+  })(document);
+  </script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+
+  <!-- 3DアリーナCanvas（ゾーンB） -->
+  <canvas id="arena-grid-canvas"></canvas>
+  <canvas id="god-rays-canvas"></canvas>
+  <div class="skylight-ambient-glow"></div>
+  <div class="skylight-roof-strip"></div>
+
+  <div id="container">
+
+        <!-- GLOBAL FLOATING HEADER -->
+    <header id="header">
+      <div class="header-container">
+        
+        <div class="header-brand">
+          <a href="index.html">
+            <img src="images/title-text1.png" alt="RE:CREATION">
+            <span class="brand-badge">2026</span>
+          </a>
+        </div>
+
+        <nav class="desktop-nav">
+          <ul>
+            <li><a href="index.html">ホーム</a></li>
+            <li><a href="sennsyu.html">出場選手</a></li>
+            <li><a href="kyougi.html">競技一覧</a></li>
+            <li><a href="basyo.html">集合場所</a></li>
+            <li><a href="cosplay.html">コスプレ大会</a></li>
+            <li><a href="ranking.html">ランキング</a></li>
+          </ul>
+        </nav>
+
+        <div class="header-actions">
+          <div class="hamburger-box">
+            <div class="hamburger">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </header>
+
+    <!-- Mobile Navigation Drawer -->
+    <nav class="mobile-nav-drawer">
+      <ul>
+        <li><a href="index.html"><span><i data-lucide="home"></i> トップ</span> <i data-lucide="chevron-right"></i></a></li>
+        <li><a href="sennsyu.html"><span><i data-lucide="users"></i> 出場選手</span> <i data-lucide="chevron-right"></i></a></li>
+        <li><a href="kyougi.html"><span><i data-lucide="trophy"></i> 競技一覧</span> <i data-lucide="chevron-right"></i></a></li>
+        <li><a href="basyo.html"><span><i data-lucide="map-pin"></i> 集合場所・座席</span> <i data-lucide="chevron-right"></i></a></li>
+        <li><a href="cosplay.html"><span><i data-lucide="sparkles"></i> コスプレ大会</span> <i data-lucide="chevron-right"></i></a></li>
+        <li><a href="ranking.html"><span><i data-lucide="medal"></i> ランキング</span> <i data-lucide="chevron-right"></i></a></li>
+        <li><a href="appli.html"><span><i data-lucide="bell"></i> 呼び出しアプリ</span> <i data-lucide="chevron-right"></i></a></li>
+        <li><a href="cyuui.html"><span><i data-lucide="shield-alert"></i> 注意事項</span> <i data-lucide="chevron-right"></i></a></li>
+        <li><a href="situmonn.html"><span><i data-lucide="help-circle"></i> Q&A (よくある質問)</span> <i data-lucide="chevron-right"></i></a></li>
+        <li><a href="movie.html"><span><i data-lucide="film"></i> ムービー紹介</span> <i data-lucide="chevron-right"></i></a></li>
+      </ul>
+    </nav>
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+      <a href="index.html">ホーム</a>
+      <span class="sep">/</span>
+      <span class="current">競技一覧</span>
+    </div>
+
+    <main class="main kyougi-main">
+
+      <div class="kyougi-title-box">
+        <div class="page-symbol-badge">
+          <div class="symbol-pod">
+            <img src="rec-img-2026/trophy-white.png" alt="" class="symbol-img">
+          </div>
+        </div>
+        <h2 class="titel kyougi-title">
+          競技一覧
+        </h2>
+      </div>
+
+      <figure class="schedule-img">
+      </figure> <!-- スケジュール画像-->
+
+      <!-- 各種競技のボックスーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー -->
+
+      <section class="info-section">
+        <div class="event-contet">
+
+          <div class="cards-row">
+
+            <a href="./ninnkyaku.html" class="event-cards">
+              <div class="cards-content">
+                <div class="text-top">
+                  <p class="sub-title">絆を繋げ神速を超えろ！</p>
+                  <h2 class="title">走れ！〇人〇脚！</h2>
+                </div>
+                <div class="schedule-place">
+                  <p class="schedule">10:50~</p>
+                  <p class="place">競技場所</p>
+                </div>
+              </div>
+            </a>
+
+            <a href="./tunahiki.html" class="event-cards">
+              <div class="cards-content">
+                <div class="text-top">
+                  <p class="sub-title">ツナヒキ×ト×カケヒキ</p>
+                  <h2 class="title">ガチンコ綱引き</h2>
+                </div>
+                <div class="schedule-place">
+                  <p class="schedule">10:50~</p>
+                  <p class="place">競技場所</p>
+                </div>
+              </div>
+            </a>
+            <a href="./dojji.html" class="event-cards">
+              <div class="cards-content">
+                <div class="text-top">
+                  <p class="sub-title">四面楚歌</p>
+                  <h2 class="title">四天王ドッジボール</h2>
+                </div>
+                <div class="schedule-place">
+                  <p class="schedule">12:10~</p>
+                  <p class="place">競技場所</p>
+                </div>
+              </div>
+            </a>
+            <a href="./kamihikouki.html" class="event-cards">
+              <div class="cards-content">
+                <div class="text-top">
+                  <p class="sub-title">飛べない紙はただの紙</p>
+                  <h2 class="title">紙飛行機飛ばし</h2>
+                </div>
+                <div class="schedule-place">
+                  <p class="schedule">13:40~</p>
+                  <p class="place">競技場所</p>
+                </div>
+              </div>
+            </a>
+            <a href="./relay.html" class="event-cards">
+              <div class="cards-content">
+                <div class="text-top">
+                  <p class="sub-title">見せつけろ！学科の絆！</p>
+                  <h2 class="title">学科別対抗リレー</h2>
+                </div>
+                <div class="schedule-place">
+                  <p class="schedule">14:20~</p>
+                  <p class="place">競技場所</p>
+                </div>
+              </div>
+            </a>
+            <!-- <div class="event-cards">
+              <a href="./ranking.html">
+                <div class="cards-text">
+                  <h2>Q&A</h2>
+                  <p>
+                    よくある質問について掲載しています。
+                  </p>
+                </div>
+              </a>
+            </div> -->
+
+          </div>
+
+        </div>
+      </section>
+
+      <!-- //各種競技のボックスーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー -->
+
+      <!-- <h2 class = "title   kyougi-chuui-titel">
+          昼食についての注意
+      </h2>
+
+      <div class = "kyougi-chuui-text">
+      <p>
+        昼食は指定された待機場所の客席で行うこと。<br>
+        レクリエーション中の外出は禁止。<br>
+        必ず昼食を持参すること。ゴミは各自で持ち帰ること。館内のゴミ箱は使用禁止 <br>
+      </p>
+      </div> -->
+    </main>
+
+        <!-- Floating Back to Top Button -->
+    <button id="backToTop" class="back-to-top" title="トップへ戻る">▲</button>
+
+    <!-- Footer -->
+    <footer id="footer">
+      <div class="footer-inner">
+        <div class="header-brand">
+          <img src="images/title-text1.png" alt="RE:CREATION">
+        </div>
+        <nav class="footer-nav">
+          <a href="index.html">ホーム</a>
+          <a href="sennsyu.html">出場選手</a>
+          <a href="kyougi.html">競技一覧</a>
+          <a href="basyo.html">集合場所</a>
+          <a href="cosplay.html">コスプレ大会</a>
+          <a href="ranking.html">ランキング</a>
+          <a href="appli.html">呼び出しアプリ</a>
+          <a href="cyuui.html">注意事項</a>
+          <a href="situmonn.html">Q&A</a>
+          <a href="movie.html">ムービー</a>
+        </nav>
+        <p class="footer-copy">©2026 RE:CREATION STAFF. ALL RIGHTS RESERVED.</p>
+      </div>
+    </footer>
+
+  </div> <!--container-->
+
+  <script>if(window.lucide){lucide.createIcons();}</script>
+</body>
+
+<script src="js/jQuery-v3.7.1.js?v=20261016_3"></script>
+<script src="js/script.js?v=20261016_3"></script>
+
+
+</html>

@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="80" height="69.282" viewBox="0 0 80 69.282">
+  <defs>
+    <!-- ゴールドの微細な光彩 -->
+    <linearGradient id="triGoldGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FEC838" stop-opacity="0.18" />
+      <stop offset="100%" stop-color="#FFA502" stop-opacity="0.04" />
+    </linearGradient>
+
+    <!-- シアンブルーの微細な光彩 -->
+    <linearGradient id="triCyanGlow" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#38B6F0" stop-opacity="0.16" />
+      <stop offset="100%" stop-color="#0288D1" stop-opacity="0.03" />
+    </linearGradient>
+  </defs>
+
+  <!-- 1. メイントライアングル（上段・下段の正三角形グリッド） -->
+  <!-- 上段下向き正三角形 (0,0)-(80,0)-(40,69.282) -->
+  <polygon points="0,0 80,0 40,69.282" fill="url(#triCyanGlow)" stroke="#38B6F0" stroke-width="1.0" stroke-opacity="0.22" />
+
+  <!-- 上段下向き三角形の内側サブトライアングル（ハイテク二重線） -->
+  <polygon points="12,6 68,6 40,54" fill="none" stroke="#FEC838" stroke-width="0.8" stroke-opacity="0.14" stroke-dasharray="3 3" />
+
+  <!-- 上向き正三角形（左半分）(-40,69.282)-(40,69.282)-(0,0) -->
+  <polygon points="-40,69.282 40,69.282 0,0" fill="url(#triGoldGlow)" stroke="#FEC838" stroke-width="1.2" stroke-opacity="0.28" />
+
+  <!-- 上向き正三角形（右半分）(40,69.282)-(120,69.282)-(80,0) -->
+  <polygon points="40,69.282 120,69.282 80,0" fill="url(#triGoldGlow)" stroke="#FEC838" stroke-width="1.2" stroke-opacity="0.28" />
+
+  <!-- 2. タイリング境界用（上辺・頂点共有部） -->
+  <polygon points="-40,0 40,0 0,69.282" fill="none" stroke="#FEC838" stroke-width="1.0" stroke-opacity="0.20" />
+  <polygon points="40,0 120,0 80,69.282" fill="none" stroke="#FEC838" stroke-width="1.0" stroke-opacity="0.20" />
+
+  <!-- 3. アスレチック・ノード（幾何学交差点の光のドット） -->
+  <circle cx="0" cy="0" r="2.2" fill="#FEC838" fill-opacity="0.5" />
+  <circle cx="80" cy="0" r="2.2" fill="#FEC838" fill-opacity="0.5" />
+  <circle cx="40" cy="69.282" r="2.4" fill="#38B6F0" fill-opacity="0.55" />
+  <circle cx="40" cy="23.094" r="1.5" fill="#FFFFFF" fill-opacity="0.4" />
+</svg>
