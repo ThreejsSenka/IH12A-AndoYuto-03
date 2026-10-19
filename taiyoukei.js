@@ -1,27 +1,13 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
-// ============================================================
-// 名古屋金城ふ頭アリーナ 館内3Dモデル（連続観客席・改訂版）
-// 添付館内図を基にしたWeb表示用の簡易立体モデル
-// 寸法と高さは館内図の形状比率から調整した表示用近似値です。
-// ============================================================
-
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xb9d6ee);
-scene.fog = new THREE.Fog(0xb9d6ee, 150, 360);
 
-const camera = new THREE.PerspectiveCamera(
-	55,
-	window.innerWidth / window.innerHeight,
-	0.1,
-	1000
-);
-camera.position.set(95, 92, 125);
-
+const camera = new THREE.PerspectiveCamera(50, innerWidth / innerHeight, 0.1, 1000);
 const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setSize(innerWidth, innerHeight);
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -33,546 +19,427 @@ document.body.appendChild(renderer.domElement);
 
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
-controls.dampingFactor = 0.05;
-controls.target.set(0, 8, 0);
+controls.dampingFactor = 0.06;
+controls.minDistance = 28;
+controls.maxDistance = 320;
+controls.minPolarAngle = 0.08;
 controls.maxPolarAngle = Math.PI * 0.49;
-controls.minDistance = 25;
-controls.maxDistance = 280;
+controls.screenSpacePanning = false;
 
-scene.add(new THREE.HemisphereLight(0xffffff, 0x506070, 2.1));
-const sunLight = new THREE.DirectionalLight(0xffffff, 3.6);
-sunLight.position.set(70, 120, 45);
-sunLight.castShadow = true;
-sunLight.shadow.mapSize.set(2048, 2048);
-sunLight.shadow.camera.left = -120;
-sunLight.shadow.camera.right = 120;
-sunLight.shadow.camera.top = 120;
-sunLight.shadow.camera.bottom = -120;
-scene.add(sunLight);
+scene.add(new THREE.HemisphereLight(0xffffff, 0x52636d, 2.2));
+const sun = new THREE.DirectionalLight(0xffffff, 3.1);
+sun.position.set(80, 120, 55);
+sun.castShadow = true;
+sun.shadow.mapSize.set(2048, 2048);
+sun.shadow.camera.left = -150;
+sun.shadow.camera.right = 150;
+sun.shadow.camera.top = 120;
+sun.shadow.camera.bottom = -120;
+scene.add(sun);
 
-const COLORS = {
-	floor: 0xd9d9d4,
-	court: 0xcaa66d,
-	courtLine: 0xf7f7f7,
-	wall: 0xe8e8e5,
-	wallEdge: 0x565d63,
-	seat: 0x315f83,
-	seatAlt: 0x7896ad,
-	step: 0x7d858b,
-	glass: 0x8fd2eb,
-	room: 0xcfd2d0,
-	door: 0x9b7953,
-	accent: 0x1d607d,
-	arenaDark: 0x22272c
+const C = {
+	floor: 0xd9dcdb,
+	court: 0x0b8cad,
+	apron: 0xe77e18,
+	line: 0xffffff,
+	seat: 0x195c93,
+	seatAlt: 0x2873aa,
+	concrete: 0xaeb4b5,
+	stair: 0xc6c9c8,
+	wall: 0xe6e8e7,
+	wallDark: 0x535b60,
+	room: 0xcbd0cf,
+	storage: 0xc5b79d,
+	service: 0xaebbc1,
+	locker: 0xb8c7d8,
+	toilet: 0xd4c3d8,
+	medical: 0xd8b8b8,
+	hall: 0xbfc8c5,
+	rail: 0xb8c0c4
 };
 
-const arena = new THREE.Group();
-scene.add(arena);
-
-const floors = [];
-const floorGroups = [];
+const model = new THREE.Group();
 const clickable = [];
-let selectedFloor = 0;
+const wallGroup = new THREE.Group();
+const roomGroup = new THREE.Group();
+const concourseGroup = new THREE.Group();
+model.add(roomGroup, concourseGroup, wallGroup);
+scene.add(model);
 
-function material(color, roughness = 0.78) {
-	return new THREE.MeshStandardMaterial({ color, roughness, metalness: 0.04 });
+function material(color, options = {}) {
+	return new THREE.MeshStandardMaterial({
+		color,
+		roughness: options.roughness ?? 0.76,
+		metalness: options.metalness ?? 0.02,
+		transparent: options.transparent ?? false,
+		opacity: options.opacity ?? 1
+	});
 }
 
 function box(parent, name, width, height, depth, x, y, z, color, options = {}) {
-	const mesh = new THREE.Mesh(
-		new THREE.BoxGeometry(width, height, depth),
-		new THREE.MeshStandardMaterial({
-			color,
-			roughness: options.roughness ?? 0.78,
-			metalness: options.metalness ?? 0.03,
-			transparent: options.transparent ?? false,
-			opacity: options.opacity ?? 1
-		})
-	);
+	const mesh = new THREE.Mesh(new THREE.BoxGeometry(width, height, depth), material(color, options));
 	mesh.position.set(x, y, z);
 	mesh.castShadow = options.castShadow ?? true;
 	mesh.receiveShadow = options.receiveShadow ?? true;
-	mesh.userData = { name, floor: options.floor ?? null, type: options.type ?? "structure" };
+	mesh.userData = { name, type: options.type ?? "structure" };
 	parent.add(mesh);
 	if (options.clickable) clickable.push(mesh);
 	return mesh;
 }
 
-function lineLoop(parent, points, y, color = COLORS.courtLine) {
-	const geometry = new THREE.BufferGeometry().setFromPoints(
-		points.map(([x, z]) => new THREE.Vector3(x, y, z))
-	);
-	const line = new THREE.LineLoop(
-		geometry,
-		new THREE.LineBasicMaterial({ color })
-	);
-	parent.add(line);
-	return line;
+function addLine(points, y, loop = false) {
+	const geometry = new THREE.BufferGeometry().setFromPoints(points.map(([x, z]) => new THREE.Vector3(x, y, z)));
+	const line = loop
+		? new THREE.LineLoop(geometry, new THREE.LineBasicMaterial({ color: C.line }))
+		: new THREE.Line(geometry, new THREE.LineBasicMaterial({ color: C.line }));
+	model.add(line);
 }
 
-function line(parent, points, y, color = COLORS.courtLine) {
-	const geometry = new THREE.BufferGeometry().setFromPoints(
-		points.map(([x, z]) => new THREE.Vector3(x, y, z))
-	);
-	const object = new THREE.Line(
-		geometry,
-		new THREE.LineBasicMaterial({ color })
-	);
-	parent.add(object);
-	return object;
-}
-
-function addTextSprite(parent, text, position, scale = [14, 3.5]) {
+function addLabel(text, x, y, z, width = 19) {
 	const canvas = document.createElement("canvas");
 	canvas.width = 1024;
-	canvas.height = 256;
+	canvas.height = 220;
 	const context = canvas.getContext("2d");
-	context.fillStyle = "rgba(8, 29, 43, 0.86)";
-	context.fillRect(0, 0, canvas.width, canvas.height);
-	context.strokeStyle = "#77d7ff";
-	context.lineWidth = 10;
-	context.strokeRect(8, 8, canvas.width - 16, canvas.height - 16);
+	context.fillStyle = "rgba(10,35,49,.86)";
+	context.fillRect(0, 0, 1024, 220);
+	context.strokeStyle = "#60c9ee";
+	context.lineWidth = 8;
+	context.strokeRect(5, 5, 1014, 210);
 	context.fillStyle = "white";
-	context.font = "bold 76px sans-serif";
+	context.font = "bold 68px sans-serif";
 	context.textAlign = "center";
 	context.textBaseline = "middle";
-	context.fillText(text, canvas.width / 2, canvas.height / 2);
+	context.fillText(text, 512, 110);
 	const texture = new THREE.CanvasTexture(canvas);
 	texture.colorSpace = THREE.SRGBColorSpace;
-	const sprite = new THREE.Sprite(
-		new THREE.SpriteMaterial({ map: texture, transparent: true, depthWrite: false })
-	);
-	sprite.position.set(...position);
-	sprite.scale.set(scale[0], scale[1], 1);
-	parent.add(sprite);
-	return sprite;
+	const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: texture, transparent: true, depthWrite: false }));
+	sprite.position.set(x, y, z);
+	sprite.scale.set(width, width * 0.215, 1);
+	model.add(sprite);
 }
 
-function addOuterShell(parent, baseY) {
-	const h = 3.2;
-	box(parent, "北外壁", 120, h, 1.1, 0, baseY + h / 2, -69, COLORS.wall);
-	box(parent, "南外壁", 120, h, 1.1, 0, baseY + h / 2, 69, COLORS.wall);
-	box(parent, "西外壁", 1.1, h, 138, -60, baseY + h / 2, 0, COLORS.wall);
-	box(parent, "東外壁", 1.1, h, 138, 60, baseY + h / 2, 0, COLORS.wall);
-	for (let x = -54; x <= 54; x += 12) {
-		box(parent, "外周柱", 1.5, 4.2, 1.5, x, baseY + 2.1, -68.6, COLORS.wallEdge);
-		box(parent, "外周柱", 1.5, 4.2, 1.5, x, baseY + 2.1, 68.6, COLORS.wallEdge);
-	}
-	for (let z = -56; z <= 56; z += 14) {
-		box(parent, "外周柱", 1.5, 4.2, 1.5, -59.6, baseY + 2.1, z, COLORS.wallEdge);
-		box(parent, "外周柱", 1.5, 4.2, 1.5, 59.6, baseY + 2.1, z, COLORS.wallEdge);
-	}
-}
-
-function addBasketballCourt(parent, y, centerX = 8, centerZ = 0, width = 50, depth = 32) {
-	box(parent, "メインアリーナ床", width, 0.35, depth, centerX, y, centerZ, COLORS.court, {
-		floor: 1,
-		type: "court",
-		clickable: true
+function addCourt(name, cx, cz, width, depth) {
+	box(model, `${name}外周床`, width + 14, 0.28, depth + 14, cx, 0.14, cz, C.apron, {
+		type: "court-apron", clickable: true, roughness: 0.3
 	});
-	const yy = y + 0.2;
-	lineLoop(parent, [
-		[centerX - width / 2, centerZ - depth / 2],
-		[centerX + width / 2, centerZ - depth / 2],
-		[centerX + width / 2, centerZ + depth / 2],
-		[centerX - width / 2, centerZ + depth / 2]
-	], yy);
-	line(parent, [[centerX, centerZ - depth / 2], [centerX, centerZ + depth / 2]], yy);
-	const circle = new THREE.Mesh(
-		new THREE.RingGeometry(4.7, 4.82, 64),
-		new THREE.MeshBasicMaterial({ color: COLORS.courtLine, side: THREE.DoubleSide })
-	);
-	circle.rotation.x = -Math.PI / 2;
-	circle.position.set(centerX, yy + 0.01, centerZ);
-	parent.add(circle);
-	for (const side of [-1, 1]) {
-		const x = centerX + side * (width / 2 - 4.5);
-		const arc = new THREE.Mesh(
-			new THREE.RingGeometry(5.7, 5.82, 32, 1, -Math.PI / 2, Math.PI),
-			new THREE.MeshBasicMaterial({ color: COLORS.courtLine, side: THREE.DoubleSide })
-		);
-		arc.rotation.x = -Math.PI / 2;
-		arc.rotation.z = side < 0 ? Math.PI : 0;
-		arc.position.set(x, yy + 0.01, centerZ);
-		parent.add(arc);
-		box(parent, "ゴール支柱", 0.5, 3.8, 0.5, centerX + side * (width / 2 - 1.5), y + 1.9, centerZ, 0x333333);
-		box(parent, "バックボード", 0.25, 2.0, 3.4, centerX + side * (width / 2 - 2.3), y + 3.5, centerZ, 0xf3f3f3);
-	}
+	box(model, name, width, 0.31, depth, cx, 0.31, cz, C.court, {
+		type: "court", clickable: true, roughness: 0.25
+	});
+	addLine([[cx-width/2,cz-depth/2],[cx+width/2,cz-depth/2],[cx+width/2,cz+depth/2],[cx-width/2,cz+depth/2]], 0.48, true);
+	addLine([[cx,cz-depth/2],[cx,cz+depth/2]], 0.49);
+	const ring = new THREE.Mesh(new THREE.RingGeometry(4.1, 4.23, 64), new THREE.MeshBasicMaterial({ color: C.line, side: THREE.DoubleSide }));
+	ring.rotation.x = -Math.PI / 2;
+	ring.position.set(cx, 0.5, cz);
+	model.add(ring);
 }
 
-function addSeatBlockLegacy(parent, name, x, y, z, rows, columns, direction, floorNo, color = COLORS.seat) {
+function addSeat(parent, name, x, y, z, rotationY, alternate = false) {
 	const group = new THREE.Group();
-	group.name = name;
-	for (let row = 0; row < rows; row++) {
-		const rise = row * 0.72;
-		const run = row * 1.05;
-		for (let column = 0; column < columns; column++) {
+	const seatColor = alternate ? C.seatAlt : C.seat;
+	box(group, name, 0.68, 0.13, 0.62, 0, 0.2, 0.08, seatColor, { type: "seat", clickable: true, castShadow: false });
+	box(group, `${name}背もたれ`, 0.68, 0.64, 0.12, 0, 0.5, 0.33, seatColor, { castShadow: false });
+	group.position.set(x, y, z);
+	group.rotation.y = rotationY;
+	parent.add(group);
+}
+
+function addStairRail(parent, x, baseY, z, rows, direction, rowDepth, rise) {
+	const alongX = direction === "north" || direction === "south";
+	for (const side of [-0.56, 0.56]) {
+		for (let row = 0; row <= rows; row += 2) {
+			const run = row * rowDepth;
 			let px = x;
 			let pz = z;
-			const across = (column - (columns - 1) / 2) * 1.28;
-			if (direction === "north") {
-				px += across;
-				pz -= run;
-			} else if (direction === "south") {
-				px += across;
-				pz += run;
-			} else if (direction === "west") {
-				px -= run;
-				pz += across;
-			} else {
-				px += run;
-				pz += across;
-			}
-			const seat = box(group, name, 0.92, 0.5, 0.92, px, y + rise + 0.25, pz,
-				(row + column) % 7 === 0 ? COLORS.seatAlt : color,
-				{ floor: floorNo, type: "seat", clickable: true, castShadow: false });
-			seat.rotation.y = direction === "west" || direction === "east" ? Math.PI / 2 : 0;
+			if (alongX) px += side;
+			else pz += side;
+			if (direction === "north") pz -= run;
+			if (direction === "south") pz += run;
+			if (direction === "west") px -= run;
+			if (direction === "east") px += run;
+			box(parent, "階段手すり", 0.07, 1.0, 0.07, px, baseY + row * rise + 0.5, pz, C.rail, { castShadow: false });
 		}
-		const stepWidth = direction === "north" || direction === "south" ? columns * 1.28 + 1.0 : 1.0;
-		const stepDepth = direction === "north" || direction === "south" ? 0.95 : columns * 1.28 + 1.0;
-		let sx = x;
-		let sz = z;
-		if (direction === "north") sz -= run;
-		if (direction === "south") sz += run;
-		if (direction === "west") sx -= run;
-		if (direction === "east") sx += run;
-		box(group, `${name}段床`, stepWidth, 0.14, stepDepth, sx, y + rise, sz, COLORS.step, {
-			castShadow: false
-		});
 	}
-	parent.add(group);
-	return group;
 }
 
-
-// ============================================================
-// 連続観客席
-// 3F平面図のように、中央アリーナを囲む一体形の観客席を生成します。
-// 直線4辺と四隅を同じ段高・同じピッチで連結しています。
-// ============================================================
-function addContinuousArenaSeats(parent, floorNo, baseY, options = {}) {
+function addVisibleStand(parent, name, cx, cz, length, rows, direction, options = {}) {
 	const group = new THREE.Group();
-	group.name = `${floorNo}F連続観客席`;
-	const rows = options.rows ?? 8;
-	const innerHalfX = options.innerHalfX ?? 32;
-	const innerHalfZ = options.innerHalfZ ?? 24;
-	const seatPitch = options.seatPitch ?? 1.28;
-	const rowDepth = options.rowDepth ?? 1.08;
-	const rowRise = options.rowRise ?? 0.66;
-	const cornerRadius = options.cornerRadius ?? 5.2;
-	const seatColor = options.color ?? COLORS.seat;
+	group.name = name;
+	const pitch = options.pitch ?? 0.91;
+	const rowDepth = options.rowDepth ?? 0.92;
+	const rise = options.rise ?? 0.5;
+	const baseY = options.baseY ?? 0.48;
+	const aisleEvery = 12;
+	const seatsPerRow = Math.floor(length / pitch);
+	const aisleWidth = 1.2;
+	const alongX = direction === "north" || direction === "south";
 
-	const seatGeometry = new THREE.BoxGeometry(0.92, 0.5, 0.92);
-	const seatMaterials = [
-		new THREE.MeshStandardMaterial({ color: seatColor, roughness: 0.78 }),
-		new THREE.MeshStandardMaterial({ color: COLORS.seatAlt, roughness: 0.78 })
-	];
-
-	function createSeat(x, y, z, rotationY, index) {
-		const seat = new THREE.Mesh(seatGeometry, seatMaterials[index % 13 === 0 ? 1 : 0]);
-		seat.position.set(x, y, z);
-		seat.rotation.y = rotationY;
-		seat.castShadow = false;
-		seat.receiveShadow = true;
-		seat.userData = {
-			name: `${floorNo}F連続観客席`,
-			floor: floorNo,
-			type: "seat"
-		};
-		group.add(seat);
-		clickable.push(seat);
-	}
-
-	let seatIndex = 0;
+	// 先にコンクリートのスタンドを作る。座席より幅広く、前面が見える形にする。
 	for (let row = 0; row < rows; row++) {
-		const offset = row * rowDepth;
-		const y = baseY + row * rowRise + 0.28;
-		const halfX = innerHalfX + offset;
-		const halfZ = innerHalfZ + offset;
+		const run = row * rowDepth;
+		const tierHeight = 0.22 + row * rise;
+		let x = cx;
+		let z = cz;
+		if (direction === "north") z -= run;
+		if (direction === "south") z += run;
+		if (direction === "west") x -= run;
+		if (direction === "east") x += run;
 
-		// 北側と南側を端まで連続配置
-		const horizontalCount = Math.floor((halfX * 2 - cornerRadius * 2) / seatPitch);
-		for (let i = 0; i <= horizontalCount; i++) {
-			const x = -halfX + cornerRadius + i * ((halfX * 2 - cornerRadius * 2) / horizontalCount);
-			createSeat(x, y, -halfZ, 0, seatIndex++);
-			createSeat(x, y, halfZ, Math.PI, seatIndex++);
-		}
-
-		// 西側と東側を端まで連続配置
-		const verticalCount = Math.floor((halfZ * 2 - cornerRadius * 2) / seatPitch);
-		for (let i = 0; i <= verticalCount; i++) {
-			const z = -halfZ + cornerRadius + i * ((halfZ * 2 - cornerRadius * 2) / verticalCount);
-			createSeat(-halfX, y, z, Math.PI / 2, seatIndex++);
-			createSeat(halfX, y, z, -Math.PI / 2, seatIndex++);
-		}
-
-		// 四隅。角にも切れ目ができないよう円弧状に接続
-		const corners = [
-			{ cx: -halfX + cornerRadius, cz: -halfZ + cornerRadius, start: Math.PI, end: Math.PI * 1.5 },
-			{ cx: halfX - cornerRadius, cz: -halfZ + cornerRadius, start: Math.PI * 1.5, end: Math.PI * 2 },
-			{ cx: halfX - cornerRadius, cz: halfZ - cornerRadius, start: 0, end: Math.PI * 0.5 },
-			{ cx: -halfX + cornerRadius, cz: halfZ - cornerRadius, start: Math.PI * 0.5, end: Math.PI }
-		];
-		const arcCount = Math.max(5, Math.ceil((Math.PI * cornerRadius / 2) / seatPitch));
-		corners.forEach((corner) => {
-			for (let i = 0; i <= arcCount; i++) {
-				const angle = corner.start + (corner.end - corner.start) * (i / arcCount);
-				const x = corner.cx + Math.cos(angle) * cornerRadius;
-				const z = corner.cz + Math.sin(angle) * cornerRadius;
-				const faceAngle = Math.atan2(-x, -z);
-				createSeat(x, y, z, faceAngle, seatIndex++);
-			}
+		const width = alongX ? length + 1.2 : rowDepth + 0.08;
+		const depth = alongX ? rowDepth + 0.08 : length + 1.2;
+		box(group, `${name}コンクリート段床`, width, tierHeight, depth, x, tierHeight / 2, z, C.concrete, {
+			type: "stand", clickable: true, castShadow: false
 		});
+	}
 
-		// 各段を一体に見せる連続段床
-		const outerShape = new THREE.Shape();
-		outerShape.moveTo(-halfX - 0.55, -halfZ - 0.55);
-		outerShape.lineTo(halfX + 0.55, -halfZ - 0.55);
-		outerShape.lineTo(halfX + 0.55, halfZ + 0.55);
-		outerShape.lineTo(-halfX - 0.55, halfZ + 0.55);
-		outerShape.closePath();
-		const hole = new THREE.Path();
-		hole.moveTo(-halfX + 0.55, -halfZ + 0.55);
-		hole.lineTo(-halfX + 0.55, halfZ - 0.55);
-		hole.lineTo(halfX - 0.55, halfZ - 0.55);
-		hole.lineTo(halfX - 0.55, -halfZ + 0.55);
-		hole.closePath();
-		outerShape.holes.push(hole);
-		const step = new THREE.Mesh(
-			new THREE.ExtrudeGeometry(outerShape, { depth: 0.14, bevelEnabled: false }),
-			new THREE.MeshStandardMaterial({ color: COLORS.step, roughness: 0.85 })
-		);
-		step.rotation.x = Math.PI / 2;
-		step.position.y = baseY + row * rowRise;
-		step.receiveShadow = true;
-		group.add(step);
+	// 12席ごとに階段用の明確な空白を取り、段床の上へ階段を重ねる。
+	for (let aisle = 1; aisle <= Math.floor(seatsPerRow / aisleEvery); aisle++) {
+		const across = (aisle * aisleEvery - (seatsPerRow - 1) / 2) * pitch;
+		for (let row = 0; row < rows; row++) {
+			const run = row * rowDepth;
+			const stepHeight = 0.24 + row * rise;
+			let x = cx;
+			let z = cz;
+			let width = aisleWidth;
+			let depth = rowDepth;
+			if (alongX) x += across;
+			else z += across;
+			if (direction === "north") z -= run;
+			if (direction === "south") z += run;
+			if (direction === "west") { x -= run; width = rowDepth; depth = aisleWidth; }
+			if (direction === "east") { x += run; width = rowDepth; depth = aisleWidth; }
+			box(group, "12席ごとの観客席階段", width, stepHeight, depth, x, stepHeight / 2 + 0.02, z, C.stair, {
+				type: "stairs", clickable: true, castShadow: false
+			});
+		}
+		if (alongX) addStairRail(group, cx + across, baseY, cz, rows, direction, rowDepth, rise);
+		else addStairRail(group, cx, baseY, cz + across, rows, direction, rowDepth, rise);
+	}
+
+	// 座席は段床の奥寄りに置き、段鼻と階段を隠さない。
+	for (let row = 0; row < rows; row++) {
+		const run = row * rowDepth;
+		const seatY = baseY + row * rise;
+		for (let index = 0; index < seatsPerRow; index++) {
+			const inAisle = index > 0 && index % aisleEvery === 0;
+			if (inAisle) continue;
+			const across = (index - (seatsPerRow - 1) / 2) * pitch;
+			let x = cx;
+			let z = cz;
+			let rotation = 0;
+			if (direction === "north") { x += across; z -= run; rotation = 0; }
+			if (direction === "south") { x += across; z += run; rotation = Math.PI; }
+			if (direction === "west") { x -= run; z += across; rotation = Math.PI / 2; }
+			if (direction === "east") { x += run; z += across; rotation = -Math.PI / 2; }
+			addSeat(group, name, x, seatY, z, rotation, (index + row) % 23 === 0);
+		}
 	}
 	parent.add(group);
 	return group;
 }
 
-function addRoom(parent, name, x, z, width, depth, y, floorNo) {
-	box(parent, name, width, 0.22, depth, x, y, z, COLORS.room, {
-		floor: floorNo,
-		type: "room",
-		clickable: true
-	});
-	const h = 3.0;
-	box(parent, `${name}北壁`, width, h, 0.28, x, y + h / 2, z - depth / 2, COLORS.wall);
-	box(parent, `${name}南壁`, width, h, 0.28, x, y + h / 2, z + depth / 2, COLORS.wall);
-	box(parent, `${name}西壁`, 0.28, h, depth, x - width / 2, y + h / 2, z, COLORS.wall);
-	box(parent, `${name}東壁`, 0.28, h, depth, x + width / 2, y + h / 2, z, COLORS.wall);
-}
-
-function addStairs(parent, x, y, z, width, depth, rotation = 0) {
-	const group = new THREE.Group();
-	const steps = 11;
-	for (let i = 0; i < steps; i++) {
-		box(group, "階段", width, 0.22 + i * 0.25, depth / steps,
-			0, (0.22 + i * 0.25) / 2, -depth / 2 + (i + 0.5) * depth / steps,
-			COLORS.step);
+function addRailing(parent, x, y, z, length, direction) {
+	const count = Math.max(2, Math.floor(length / 2));
+	for (let i = 0; i <= count; i++) {
+		const offset = -length / 2 + i * length / count;
+		if (direction === "x") box(parent, "手すり", 0.08, 1.1, 0.08, x + offset, y + 0.55, z, C.rail, { castShadow: false });
+		else box(parent, "手すり", 0.08, 1.1, 0.08, x, y + 0.55, z + offset, C.rail, { castShadow: false });
 	}
-	group.position.set(x, y, z);
-	group.rotation.y = rotation;
-	parent.add(group);
+	if (direction === "x") box(parent, "手すり", length, 0.08, 0.08, x, y + 1.06, z, C.rail, { castShadow: false });
+	else box(parent, "手すり", 0.08, 0.08, length, x, y + 1.06, z, C.rail, { castShadow: false });
 }
 
-function buildFirstFloor() {
-	const group = new THREE.Group();
-	group.name = "1F";
-	const y = 0;
-	box(group, "1F床", 120, 0.5, 138, 0, y - 0.25, 0, COLORS.floor, { receiveShadow: true });
-	addOuterShell(group, y);
-	addBasketballCourt(group, y + 0.15, 12, -4, 54, 34);
-	box(group, "サブアリーナ", 36, 0.32, 66, -39, y + 0.16, -17, 0xd7b27b, {
-		floor: 1, type: "court", clickable: true
+
+function addCorridor(name, x, z, width, depth, y = 0, color = C.hall) {
+	box(roomGroup, name, width, 0.16, depth, x, y + 0.08, z, color, {
+		type: "corridor", clickable: true, castShadow: false
 	});
-	lineLoop(group, [[-57, -50], [-21, -50], [-21, 16], [-57, 16]], y + 0.34);
-	addContinuousArenaSeats(group, 1, y + 0.4, {
-		rows: 4, innerHalfX: 29, innerHalfZ: 20, cornerRadius: 4.6
-	});
-	addRoom(group, "会議室・控室群", -6, -58, 47, 16, y + 0.12, 1);
-	addRoom(group, "受水槽室", 39, -59, 15, 14, y + 0.12, 1);
-	addRoom(group, "電気室・管理諸室", 51, 23, 15, 82, y + 0.12, 1);
-	addRoom(group, "ミーティング・更衣室群", 10, 58, 66, 17, y + 0.12, 1);
-	addRoom(group, "器材庫", -15, 31, 18, 11, y + 0.12, 1);
-	addStairs(group, -49, y, 52, 10, 14, 0);
-	addStairs(group, 54, y, -56, 7, 13, 0);
-	addTextSprite(group, "1F メインアリーナ", [12, 7.5, -4], [22, 4.2]);
-	addTextSprite(group, "サブアリーナ", [-39, 5.5, -17], [18, 3.5]);
-	return group;
 }
 
-function buildSecondFloor() {
-	const group = new THREE.Group();
-	group.name = "2F";
-	const y = 8;
-	box(group, "2F回廊床", 120, 0.38, 138, 0, y, 0, 0xc7cbcb, { transparent: true, opacity: 0.92 });
-	box(group, "メインアリーナ吹抜", 62, 0.5, 48, 11, y + 0.05, -2, 0x15191c, { transparent: true, opacity: 0.12 });
-	box(group, "サブアリーナ吹抜", 38, 0.5, 70, -39, y + 0.05, -16, 0x15191c, { transparent: true, opacity: 0.12 });
-	addOuterShell(group, y);
-	addContinuousArenaSeats(group, 2, y + 0.25, {
-		rows: 7, innerHalfX: 32, innerHalfZ: 24, cornerRadius: 5.2
+function addDoor(name, x, z, rotationY = 0, y = 0) {
+	const door = box(roomGroup, name, 1.5, 2.25, 0.12, x, y + 1.125, z, 0x9d7b55, {
+		type: "door", clickable: true, castShadow: false
 	});
-	addRoom(group, "2F会議室・放送関係室", 3, -59, 45, 15, y + 0.15, 2);
-	addRoom(group, "2Fロビー・共用部", 43, 28, 16, 64, y + 0.15, 2);
-	addRoom(group, "2F更衣室・便所群", 7, 58, 58, 16, y + 0.15, 2);
-	addStairs(group, -48, y, 53, 10, 14, 0);
-	addStairs(group, 54, y, -55, 7, 13, 0);
-	addTextSprite(group, "2F 観客席・回廊", [10, 16, -2], [23, 4.2]);
-	return group;
+	door.rotation.y = rotationY;
+	return door;
 }
 
-function buildThirdFloor() {
-	const group = new THREE.Group();
-	group.name = "3F";
-	const y = 16;
-	box(group, "3F床", 120, 0.38, 138, 0, y, 0, 0xc4c8c7, { transparent: true, opacity: 0.94 });
-	box(group, "アリーナ上部吹抜", 62, 0.45, 49, 11, y + 0.05, -2, 0x101315, { transparent: true, opacity: 0.12 });
-	addOuterShell(group, y);
-	addContinuousArenaSeats(group, 3, y + 0.25, {
-		rows: 10, innerHalfX: 32, innerHalfZ: 24, cornerRadius: 5.4, color: 0x274d70
-	});
-	addRoom(group, "3F吹抜・展示上部", -42, -12, 31, 76, y + 0.12, 3);
-	addRoom(group, "3F空調機械室", 52, -39, 13, 36, y + 0.12, 3);
-	addRoom(group, "3F空調機械室", 52, 42, 13, 35, y + 0.12, 3);
-	addStairs(group, -48, y, 53, 10, 14, 0);
-	addStairs(group, 54, y, -55, 7, 13, 0);
-	addTextSprite(group, "3F 上段観客席", [10, 25, -2], [23, 4.2]);
-	return group;
+function addRoom(name, x, z, width, depth, color, y = 0) {
+	const h = 3;
+	box(roomGroup, name, width, 0.18, depth, x, y + 0.09, z, color, { type: "room", clickable: true });
+	box(roomGroup, `${name}北壁`, width, h, 0.22, x, y + h/2, z-depth/2, C.wall);
+	box(roomGroup, `${name}南壁`, width, h, 0.22, x, y + h/2, z+depth/2, C.wall);
+	box(roomGroup, `${name}西壁`, 0.22, h, depth, x-width/2, y + h/2, z, C.wall);
+	box(roomGroup, `${name}東壁`, 0.22, h, depth, x+width/2, y + h/2, z, C.wall);
+	addDoor(`${name}出入口`, x, z + depth / 2 + 0.13, 0, y);
 }
 
-floorGroups.push(buildFirstFloor(), buildSecondFloor(), buildThirdFloor());
-floorGroups.forEach((group, index) => {
-	arena.add(group);
-	floors.push({ name: `${index + 1}F`, group });
-});
+// 一つの館内空間
+box(model, "館内床", 236, 0.5, 144, -8, -0.25, 0, C.floor, { receiveShadow: true });
+box(model, "北外壁", 236, 15, 0.8, -8, 7.5, -72, C.wall);
+box(model, "南外壁", 236, 15, 0.8, -8, 7.5, 72, C.wall);
+box(model, "西外壁", 0.8, 15, 144, -126, 7.5, 0, C.wall);
+box(model, "東外壁", 0.8, 15, 144, 110, 7.5, 0, C.wall);
 
-// 建物外周のガラス表現
-const glassMaterial = new THREE.MeshPhysicalMaterial({
-	color: COLORS.glass,
-	transparent: true,
-	opacity: 0.17,
-	roughness: 0.22,
-	metalness: 0.02,
-	side: THREE.DoubleSide,
-	depthWrite: false
-});
-const glassShell = new THREE.Mesh(new THREE.BoxGeometry(122, 27, 140), glassMaterial);
-glassShell.position.y = 13;
-scene.add(glassShell);
+addCourt("メインアリーナ競技面", 25, -1, 58, 36);
+addCourt("サブアリーナ競技面", -84, -5, 34, 72);
 
-// 敷地
-box(scene, "敷地", 190, 0.6, 190, 0, -0.65, 0, 0x93a38d, { receiveShadow: true });
-const grid = new THREE.GridHelper(190, 38, 0x60737d, 0x91a4ad);
-grid.position.y = -0.32;
+// 写真の構成に合わせ、長辺側は段床を見せる大規模スタンド。
+addVisibleStand(model, "北側メインスタンド", 25, -28, 88, 21, "north");
+addVisibleStand(model, "南側メインスタンド", 25, 26, 88, 21, "south");
+addVisibleStand(model, "西側メインスタンド", -15, -1, 38, 7, "west");
+addVisibleStand(model, "東側メインスタンド", 65, -1, 38, 7, "east");
+addVisibleStand(model, "サブアリーナ観覧席", -62, -5, 66, 7, "east");
+
+// 中段通路と手すり
+box(concourseGroup, "北側中段コンコース", 94, 0.3, 4.2, 25, 6.2, -50, C.floor, { type: "concourse", clickable: true });
+box(concourseGroup, "南側中段コンコース", 94, 0.3, 4.2, 25, 6.2, 48, C.floor, { type: "concourse", clickable: true });
+addRailing(concourseGroup, 25, 6.35, -47.8, 94, "x");
+addRailing(concourseGroup, 25, 6.35, 45.8, 94, "x");
+
+// 外周諸室と通路。館内図に記載された倉庫・設備室・控室・ロッカー室を細分化。
+// 北側サービス帯
+addCorridor("北側廊下(2)", 23, -56.5, 112, 4.2);
+addRoom("倉庫D", -25, -64, 12, 11, C.storage);
+addRoom("配管ヤード北西", -11, -64, 14, 11, C.service);
+addRoom("倉庫C", 4, -64, 12, 11, C.storage);
+addRoom("配管ヤード北東", 19, -64, 16, 11, C.service);
+addRoom("倉庫(4)", 36, -64, 14, 11, C.storage);
+addRoom("受水槽室", 53, -64, 18, 11, C.service);
+addRoom("倉庫(3)", 69, -64, 12, 11, C.storage);
+addRoom("搬入通路前室", 99, -64, 16, 11, C.hall);
+addCorridor("搬入通路", 99, -51, 12, 14);
+addRoom("ゴミ保管庫", 99, -39, 16, 10, C.storage);
+
+// 東側設備・控室帯
+addCorridor("東側廊下(4)", 84, 0, 5, 96);
+addRoom("倉庫(2)", 99, -39, 16, 10, C.storage);
+addRoom("発電機室", 99, -27, 16, 10, C.service);
+addRoom("電気室", 99, -15, 16, 10, C.service);
+addRoom("ブロアー室", 99, -3, 16, 10, C.service);
+addRoom("制御盤室", 99, 9, 16, 10, C.service);
+addRoom("控室(8)", 99, 21, 16, 10, C.room);
+addRoom("控室(7)", 99, 33, 16, 10, C.room);
+addRoom("控室(6)", 99, 45, 16, 10, C.room);
+addCorridor("避難通路(2)", 99, 56, 16, 5);
+
+// 南側選手・運営諸室帯
+addCorridor("ロッカー室前通路", 28, 54.5, 94, 4.5);
+addRoom("倉庫A", -13, 64, 13, 12, C.storage);
+addRoom("配管ヤード南西", 2, 64, 15, 12, C.service);
+addRoom("倉庫B", 18, 64, 13, 12, C.storage);
+addRoom("配管ヤード南東", 34, 64, 15, 12, C.service);
+addRoom("倉庫(1)", 49, 64, 12, 12, C.storage);
+addRoom("ロッカールーム(ホーム)", 63, 64, 14, 12, C.locker);
+
+// 玄関・受付・医療・ミックスゾーン
+addCorridor("玄関ホール", -4, 66, 18, 10);
+addRoom("受付", -15, 65, 8, 10, C.room);
+addRoom("応接室", -25, 65, 10, 10, C.room);
+addRoom("メディカルルーム", 5, 65, 12, 10, C.medical);
+addRoom("ミックスゾーン", 20, 65, 14, 10, C.hall);
+addRoom("控室(3)", 36, 65, 12, 10, C.room);
+addRoom("控室(5)", 50, 65, 12, 10, C.room);
+
+// 更衣・シャワー・便所
+addRoom("女子更衣室", -9, 46, 14, 10, C.locker);
+addRoom("男子更衣室", 7, 46, 14, 10, C.locker);
+addRoom("シャワー室(1)(2)", 23, 46, 14, 10, C.locker);
+addRoom("シャワー室(3)(4)", 39, 46, 14, 10, C.locker);
+addRoom("女子便所", 55, 46, 12, 10, C.toilet);
+addRoom("男子便所", 67, 46, 10, 10, C.toilet);
+
+// メイン・サブ間のホール
+// 壁で囲まれた部屋ではなく、両アリーナをつなぐ大きな連続空間として表現する。
+addCorridor("メイン・サブ間大ホール", -40, -4, 26, 104, 0, 0xd3d7d5);
+
+// ホール内には独立した壁・小部屋を置かない。
+// 控室と倉庫は大ホールの南端外側へ移動する。
+addRoom("控室(1)", -49, 58, 11, 11, C.room);
+addRoom("控室(2)", -37, 58, 11, 11, C.room);
+addRoom("観覧席身障者用下部倉庫(6)", -25, 58, 11, 11, C.storage);
+addCorridor("避難通路(1)", -40, 50, 26, 5);
+
+// サブアリーナ周囲
+addRoom("サブアリーナ用具庫", -116, -48, 16, 16, C.storage);
+addRoom("サブアリーナ倉庫", -116, 42, 16, 16, C.storage);
+addCorridor("サブアリーナ避難通路", -60, -5, 4.5, 86);
+addRoom("カーテンダウン室", -55, 48, 10, 8, C.service);
+
+// アリーナと外周通路の壁
+for (const z of [-55, 53]) {
+	for (const x of [-5, 25, 55]) box(wallGroup, "アリーナと通路の間の壁", 25, 4, 0.35, x, 2, z, C.wallDark, { type: "arena-wall", clickable: true });
+}
+for (const x of [-28, 80]) {
+	for (const z of [-28, -1, 26]) box(wallGroup, "アリーナと通路の間の壁", 0.35, 4, 20, x, 2, z, C.wallDark, { type: "arena-wall", clickable: true });
+}
+
+addLabel("メインアリーナ", 25, 12.5, -1, 22);
+addLabel("サブアリーナ", -84, 8, -5, 18);
+
+box(scene, "敷地", 300, 0.5, 194, -8, -0.75, 0, 0x98a78f, { receiveShadow: true });
+const grid = new THREE.GridHelper(300, 60, 0x637984, 0x94a6ac);
+grid.position.set(-8, -0.48, 0);
 scene.add(grid);
 
-// ============================================================
-// UI
-// ============================================================
-const ui = document.createElement("div");
-ui.style.cssText = `
-	position:fixed;top:16px;left:16px;z-index:10;
-	padding:14px 16px;background:rgba(8,24,35,.90);color:white;
-	font-family:sans-serif;border:1px solid #77d7ff;border-radius:10px;
-	box-shadow:0 8px 30px rgba(0,0,0,.28);max-width:330px;
-`;
-ui.innerHTML = `
-	<div style="font-weight:bold;font-size:18px;margin-bottom:10px;">名古屋金城ふ頭アリーナ</div>
-	<div style="font-size:13px;line-height:1.6;margin-bottom:10px;">ドラッグ：回転　ホイール：拡大縮小<br>座席・部屋・コート：クリックで情報表示</div>
-	<div style="display:flex;gap:6px;flex-wrap:wrap;">
-		<button data-floor="0">全階表示</button>
-		<button data-floor="1">1F</button>
-		<button data-floor="2">2F</button>
-		<button data-floor="3">3F</button>
-		<button id="explode">階層分解</button>
-	</div>
-	<div id="arenaInfo" style="margin-top:10px;min-height:42px;font-size:13px;color:#dff5ff;">館内要素をクリックしてください。</div>
-`;
-document.body.appendChild(ui);
-
-ui.querySelectorAll("button").forEach((button) => {
-	button.style.cssText = "padding:7px 10px;border:1px solid #77d7ff;border-radius:6px;background:#15384d;color:white;cursor:pointer;";
-});
-
-function showFloor(mode) {
-	selectedFloor = mode;
+function setPerspectiveCamera() {
+	controls.enabled = false;
 	camera.up.set(0, 1, 0);
-	floorGroups.forEach((group, index) => {
-		group.visible = mode === 0 || mode === index + 1;
-	});
-	glassShell.visible = mode === 0;
-	if (mode === 1) {
-		camera.position.set(88, 62, 105);
-		controls.target.set(0, 2, 0);
-	} else if (mode === 2) {
-		camera.position.set(88, 70, 105);
-		controls.target.set(0, 10, 0);
-	} else if (mode === 3) {
-		camera.position.set(0, 155, 0.01);
-		camera.up.set(0, 0, -1);
-		controls.target.set(0, 18, 0);
-	} else {
-		camera.position.set(95, 92, 125);
-		controls.target.set(0, 8, 0);
-	}
+	camera.position.set(165, 105, 195);
+	controls.target.set(-5, 5, 0);
+	camera.lookAt(controls.target);
+	camera.updateProjectionMatrix();
+	controls.update();
+	controls.enabled = true;
 }
 
-ui.querySelectorAll("[data-floor]").forEach((button) => {
-	button.addEventListener("click", () => showFloor(Number(button.dataset.floor)));
-});
+function setTopCamera() {
+	controls.enabled = false;
+	camera.up.set(0, 1, 0);
+	camera.position.set(-8, 240, 0.01);
+	controls.target.set(-8, 0, 0);
+	camera.lookAt(controls.target);
+	camera.updateProjectionMatrix();
+	controls.update();
+	controls.enabled = true;
+}
 
-let exploded = false;
-document.getElementById("explode").addEventListener("click", () => {
-	exploded = !exploded;
-	floorGroups[0].position.x = exploded ? -46 : 0;
-	floorGroups[1].position.x = 0;
-	floorGroups[2].position.x = exploded ? 46 : 0;
-	glassShell.visible = !exploded && selectedFloor === 0;
-	document.getElementById("explode").textContent = exploded ? "通常配置" : "階層分解";
-});
+let wallsVisible = true;
+const ui = document.createElement("div");
+ui.style.cssText = "position:fixed;top:16px;left:16px;z-index:10;padding:14px 16px;background:rgba(8,24,35,.91);color:white;font-family:sans-serif;border:1px solid #77d7ff;border-radius:10px;max-width:360px";
+ui.innerHTML = `<div style="font-size:18px;font-weight:bold;margin-bottom:8px">名古屋金城ふ頭アリーナ</div><div style="font-size:13px;line-height:1.55">東側領域を拡張し、アリーナ横壁・通路・小部屋の重なりを解消</div><div style="display:flex;gap:6px;margin-top:9px;flex-wrap:wrap"><button id="perspective">斜め視点</button><button id="top">真上</button><button id="toggleRooms">諸室を非表示</button><button id="toggleConcourse">通路を非表示</button><button id="toggleWalls">壁を非表示</button></div><div id="info" style="font-size:13px;margin-top:9px;min-height:36px;color:#dff5ff">要素をクリックしてください。</div>`;
+document.body.appendChild(ui);
+ui.querySelectorAll("button").forEach((button) => button.style.cssText = "padding:7px 11px;border:1px solid #77d7ff;border-radius:6px;background:#15384d;color:white;cursor:pointer");
+document.getElementById("perspective").onclick = setPerspectiveCamera;
+document.getElementById("top").onclick = setTopCamera;
+document.getElementById("toggleRooms").onclick = (event) => { roomGroup.visible = !roomGroup.visible; event.currentTarget.textContent = roomGroup.visible ? "諸室を非表示" : "諸室を表示"; };
+document.getElementById("toggleConcourse").onclick = (event) => { concourseGroup.visible = !concourseGroup.visible; event.currentTarget.textContent = concourseGroup.visible ? "通路を非表示" : "通路を表示"; };
+document.getElementById("toggleWalls").onclick = (event) => { wallsVisible = !wallsVisible; wallGroup.visible = wallsVisible; event.currentTarget.textContent = wallsVisible ? "壁を非表示" : "壁を表示"; };
 
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
-const info = document.getElementById("arenaInfo");
-let highlight = null;
+const info = document.getElementById("info");
+let selected = null;
 let oldColor = null;
-
 renderer.domElement.addEventListener("click", (event) => {
-	if (event.target !== renderer.domElement) return;
 	const rect = renderer.domElement.getBoundingClientRect();
 	pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
 	pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
 	raycaster.setFromCamera(pointer, camera);
-	const visibleObjects = clickable.filter((object) => object.visible && object.parent?.visible !== false);
-	const hit = raycaster.intersectObjects(visibleObjects, false)[0];
-	if (highlight && oldColor !== null) {
-		highlight.material.color.setHex(oldColor);
-	}
-	if (!hit) {
-		highlight = null;
-		oldColor = null;
-		info.textContent = "館内要素をクリックしてください。";
-		return;
-	}
-	highlight = hit.object;
-	oldColor = highlight.material.color.getHex();
-	highlight.material.color.setHex(0xffb340);
-	const floorText = highlight.userData.floor ? `${highlight.userData.floor}F / ` : "";
-	info.innerHTML = `<b>${floorText}${highlight.userData.name}</b><br>種別：${highlight.userData.type}`;
+	const hit = raycaster.intersectObjects(clickable, false)[0];
+	if (selected && oldColor !== null) selected.material.color.setHex(oldColor);
+	if (!hit) { selected = null; oldColor = null; info.textContent = "要素をクリックしてください。"; return; }
+	selected = hit.object;
+	oldColor = selected.material.color.getHex();
+	selected.material.color.setHex(0xffad38);
+	info.innerHTML = `<b>${selected.userData.name}</b><br>種別: ${selected.userData.type}`;
 });
 
 window.addEventListener("resize", () => {
-	camera.aspect = window.innerWidth / window.innerHeight;
+	camera.aspect = innerWidth / innerHeight;
 	camera.updateProjectionMatrix();
-	renderer.setSize(window.innerWidth, window.innerHeight);
+	renderer.setSize(innerWidth, innerHeight);
 });
 
-const clock = new THREE.Clock();
-function animate() {
-	requestAnimationFrame(animate);
-	controls.update(clock.getDelta());
-	renderer.render(scene, camera);
-}
+setPerspectiveCamera();
+function animate() { requestAnimationFrame(animate); controls.update(); renderer.render(scene, camera); }
 animate();
