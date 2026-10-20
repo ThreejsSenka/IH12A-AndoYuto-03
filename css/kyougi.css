@@ -176,8 +176,8 @@
 
 @media screen and (max-width: 680px) {
   .kyougi-main { margin: 1.5rem auto 4.5rem; width: 94%; }
-  .kyougi-title { padding: 1.6rem 1.0rem; margin-bottom: 2rem; border-radius: 16px; }
-  .kyougi-title h2 { font-size: clamp(1.5rem, 5.5vw, 1.8rem); }
+  .kyougi-title-box { padding: 1.6rem 1.0rem; margin-bottom: 2rem; border-radius: 16px; }
+  .kyougi-title { font-size: clamp(1.5rem, 5.5vw, 1.8rem); }
   .schedule-title h3 { font-size: 1.25rem; margin: 2rem 0 1rem; }
   .cards-row { grid-template-columns: 1fr; gap: 1.2rem; }
   .schedule-img { height: 35vh; min-height: 220px; border-radius: 16px; }

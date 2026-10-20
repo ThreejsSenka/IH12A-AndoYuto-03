@@ -11,6 +11,7 @@ $(function () {
     const hamburgerBoxes = document.querySelectorAll(".hamburger-box, .hamburger");
     const drawer = document.querySelector(".mobile-nav-drawer");
     const hamburgerIcons = document.querySelectorAll(".hamburger");
+    const hamburgerButton = document.querySelector(".hamburger-box");
 
     if (!drawer) return;
 
@@ -26,6 +27,10 @@ $(function () {
       });
       if (willOpen) drawer.classList.add("active");
       else drawer.classList.remove("active");
+      if (hamburgerButton) {
+        hamburgerButton.setAttribute("aria-expanded", String(willOpen));
+        hamburgerButton.setAttribute("aria-label", willOpen ? "メニューを閉じる" : "メニューを開く");
+      }
     }
 
     hamburgerBoxes.forEach(function (btn) {
@@ -41,6 +46,7 @@ $(function () {
       link.addEventListener("click", function () {
         hamburgerIcons.forEach(function (icon) { icon.classList.remove("active"); });
         drawer.classList.remove("active");
+        if (hamburgerButton) hamburgerButton.setAttribute("aria-expanded", "false");
       });
     });
 
@@ -92,7 +98,7 @@ $(function () {
   // 4. Copy Address to Clipboard
   // ========================================================
   $(".copy-address-btn").on("click", function () {
-    var addressText = "〒460-0032 愛知県名古屋市中区二の丸1-1 愛知県体育館";
+    var addressText = "〒455-0848 愛知県名古屋市港区金城ふ頭2丁目7 名古屋金城ふ頭アリーナ";
     if (navigator.clipboard) {
       navigator.clipboard.writeText(addressText).then(function () {
         var $btn = $(".copy-address-btn");

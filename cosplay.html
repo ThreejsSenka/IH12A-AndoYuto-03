@@ -9,6 +9,7 @@
   <title>コスプレ大会 | RE:CREATION</title>
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="js/site-shell.js?v=20261019_1" defer></script>
 </head>
 
 <body class="page-cosplay">
@@ -24,55 +25,10 @@
   <div id="container">
 
     <!-- GLOBAL FLOATING HEADER -->
-    <header id="header">
-      <div class="header-container">
-        
-        <div class="header-brand">
-          <a href="index.html">
-            <img src="images/title-text1.png" alt="RE:CREATION">
-            <span class="brand-badge">2026</span>
-          </a>
-        </div>
-
-        <nav class="desktop-nav">
-          <ul>
-            <li><a href="index.html">トップ</a></li>
-            <li><a href="sennsyu.html">出場選手</a></li>
-            <li><a href="kyougi.html">競技一覧</a></li>
-            <li><a href="basyo.html">集合場所</a></li>
-            <li><a href="cosplay.html" class="active">コスプレ大会</a></li>
-            <li><a href="ranking.html">ランキング</a></li>
-          </ul>
-        </nav>
-
-        <div class="header-actions">
-          <div class="hamburger-box" aria-label="メニューを開く">
-            <div class="hamburger">
-              <span></span>
-              <span></span>
-              <span></span>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </header>
+    <div data-site-header></div>
 
     <!-- Mobile Navigation Drawer -->
-    <nav class="mobile-nav-drawer">
-      <ul>
-        <li><a href="index.html"><span><i data-lucide="home"></i> トップ</span> <i data-lucide="chevron-right"></i></a></li>
-        <li><a href="sennsyu.html"><span><i data-lucide="users"></i> 出場選手</span> <i data-lucide="chevron-right"></i></a></li>
-        <li><a href="kyougi.html"><span><i data-lucide="trophy"></i> 競技一覧</span> <i data-lucide="chevron-right"></i></a></li>
-        <li><a href="basyo.html"><span><i data-lucide="map-pin"></i> 集合場所・座席</span> <i data-lucide="chevron-right"></i></a></li>
-        <li><a href="cosplay.html"><span><i data-lucide="sparkles"></i> コスプレ大会</span> <i data-lucide="chevron-right"></i></a></li>
-        <li><a href="ranking.html"><span><i data-lucide="medal"></i> ランキング</span> <i data-lucide="chevron-right"></i></a></li>
-        <li><a href="appli.html"><span><i data-lucide="bell"></i> 呼び出しアプリ</span> <i data-lucide="chevron-right"></i></a></li>
-        <li><a href="cyuui.html"><span><i data-lucide="shield-alert"></i> 注意事項</span> <i data-lucide="chevron-right"></i></a></li>
-        <li><a href="situmonn.html"><span><i data-lucide="help-circle"></i> Q&A (よくある質問)</span> <i data-lucide="chevron-right"></i></a></li>
-        <li><a href="movie.html"><span><i data-lucide="film"></i> ムービー紹介</span> <i data-lucide="chevron-right"></i></a></li>
-      </ul>
-    </nav>
+    <div data-site-mobile-nav></div>
 
     <!-- Breadcrumb -->
     <div class="breadcrumb">
@@ -223,37 +179,12 @@
     <button id="backToTop" class="back-to-top" title="トップへ戻る"><i data-lucide="chevron-up"></i></button>
 
     <!-- Footer -->
-    <footer id="footer">
-      <div class="footer-inner">
-        <div class="header-brand">
-          <img src="images/title-text1.png" alt="RE:CREATION">
-        </div>
-        <nav class="footer-nav">
-          <a href="index.html">トップ</a>
-          <a href="sennsyu.html">出場選手</a>
-          <a href="kyougi.html">競技一覧</a>
-          <a href="basyo.html">集合場所</a>
-          <a href="cosplay.html">コスプレ大会</a>
-          <a href="ranking.html">ランキング</a>
-          <a href="appli.html">呼び出しアプリの案内</a>
-          <a href="cyuui.html">注意事項</a>
-          <a href="situmonn.html">Q&A</a>
-          <a href="movie.html">ムービー</a>
-        </nav>
-        <p class="footer-copy">©2026 RE:CREATION STAFF. ALL rights reserved</p>
-      </div>
-    </footer>
+    <div data-site-footer></div>
 
   </div> <!--container-->
 
   <script src="js/jQuery-v3.7.1.js?v=20261016_3"></script>
   <script src="js/script.js?v=20261016_3"></script>
-  <script>
-    if (window.lucide) {
-      lucide.createIcons();
-    }
-  </script>
-
 </body>
 
 </html>

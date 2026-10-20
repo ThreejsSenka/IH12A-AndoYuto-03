@@ -80,7 +80,7 @@
   .situmonn-main { margin: 1.5rem auto 4.5rem; width: 94%; }
   .situmonn-title { padding: 1.6rem 1.0rem; margin-bottom: 2rem; border-radius: 16px; }
   .situmonn-title h2 { font-size: clamp(1.5rem, 5.5vw, 1.8rem); }
-  .qa-block { padding: 1.8rem 1.2rem; border-radius: 16px; }
-  .question { font-size: 1.05rem; line-height: 1.6; }
-  .answer { font-size: 0.94rem; line-height: 1.72; }
+  .cosShousai-container { padding: 1.8rem 1.2rem; border-radius: 16px; }
+  .situmonn { font-size: 1.05rem; line-height: 1.6; }
+  .kotae, .kotae3 { font-size: 0.94rem; line-height: 1.72; }
 }

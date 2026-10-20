@@ -112,7 +112,7 @@
   .appli-main { margin: 1.5rem auto 4.5rem; width: 94%; }
   .appli-title { padding: 1.6rem 1.0rem; margin-bottom: 2rem; border-radius: 16px; }
   .appli-title h2 { font-size: clamp(1.5rem, 5.5vw, 1.8rem); }
-  .appli-container { padding: 2.0rem 1.2rem; border-radius: 16px; }
-  .appli-container h3 { font-size: 1.25rem; margin-top: 1.8rem; margin-bottom: 0.8rem; }
-  .appli-container p, .appli-container li { font-size: 0.94rem; line-height: 1.75; }
+  .event-guidelines { padding: 2.0rem 1.2rem; border-radius: 16px; }
+  .event-guidelines h3 { font-size: 1.25rem; margin-top: 1.8rem; margin-bottom: 0.8rem; }
+  .event-guidelines p, .event-guidelines li { font-size: 0.94rem; line-height: 1.75; }
 }
