@@ -7,25 +7,42 @@
   <link rel="stylesheet" href="css/common.css?v=20261016_3">
   <link rel="stylesheet" href="css/kyougi.css?v=20261016_3">
   <title>競技一覧 | RE:CREATION</title>
-<script src="https://unpkg.com/lucide@latest"></script>
-  <script src="js/site-shell.js?v=20261019_1" defer></script>
+  <script>
+    (function (d) {
+      var config = {
+        kitId: 'yon8bkv',
+        scriptTimeout: 3000,
+        async: true
+      },
+        h = d.documentElement, t = setTimeout(function () { h.className = h.className.replace(/\bwf-loading\b/g, "") + " wf-inactive"; }, config.scriptTimeout), tk = d.createElement("script"), f = false, s = d.getElementsByTagName("script")[0], a; h.className += " wf-loading"; tk.src = 'https://use.typekit.net/' + config.kitId + '.js'; tk.async = true; tk.onload = tk.onreadystatechange = function () { a = this.readyState; if (f || a && a != "complete" && a != "loaded") return; f = true; clearTimeout(t); try { Typekit.load(config) } catch (e) { } }; s.parentNode.insertBefore(tk, s)
+    })(document);
+        (function (d) {
+      var config = {
+        kitId: 'sqx3dfn',
+        scriptTimeout: 3000,
+        async: true
+      },
+        h = d.documentElement, t = setTimeout(function () { h.className = h.className.replace(/\bwf-loading\b/g, "") + " wf-inactive"; }, config.scriptTimeout), tk = d.createElement("script"), f = false, s = d.getElementsByTagName("script")[0], a; h.className += " wf-loading"; tk.src = 'https://use.typekit.net/' + config.kitId + '.js'; tk.async = true; tk.onload = tk.onreadystatechange = function () { a = this.readyState; if (f || a && a != "complete" && a != "loaded") return; f = true; clearTimeout(t); try { Typekit.load(config) } catch (e) { } }; s.parentNode.insertBefore(tk, s)
+    })(document);
+      (function(d) {
+    var config = {
+      kitId: 'knm1jcc',
+      scriptTimeout: 3000,
+      async: true
+    },
+    h=d.documentElement,t=setTimeout(function(){h.className=h.className.replace(/\bwf-loading\b/g,"")+" wf-inactive";},config.scriptTimeout),tk=d.createElement("script"),f=false,s=d.getElementsByTagName("script")[0],a;h.className+=" wf-loading";tk.src='https://use.typekit.net/'+config.kitId+'.js';tk.async=true;tk.onload=tk.onreadystatechange=function(){a=this.readyState;if(f||a&&a!="complete"&&a!="loaded")return;f=true;clearTimeout(t);try{Typekit.load(config)}catch(e){}};s.parentNode.insertBefore(tk,s)
+  })(document);
+  </script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="js/components.js?v=20261016_3"></script>
 </head>
 
 <body>
 
-  <!-- 3DアリーナCanvas（ゾーンB） -->
-  <canvas id="arena-grid-canvas"></canvas>
-  <canvas id="god-rays-canvas"></canvas>
-  <div class="skylight-ambient-glow"></div>
-  <div class="skylight-roof-strip"></div>
+<div id="container">
 
-  <div id="container">
+    <site-header></site-header>
 
-        <!-- GLOBAL FLOATING HEADER -->
-    <div data-site-header></div>
-
-    <!-- Mobile Navigation Drawer -->
-    <div data-site-mobile-nav></div>
     <!-- Breadcrumb -->
     <div class="breadcrumb">
       <a href="index.html">ホーム</a>
@@ -117,46 +134,24 @@
                 </div>
               </div>
             </a>
-            <!-- <div class="event-cards">
-              <a href="./ranking.html">
-                <div class="cards-text">
-                  <h2>Q&A</h2>
-                  <p>
-                    よくある質問について掲載しています。
-                  </p>
-                </div>
-              </a>
-            </div> -->
-
-          </div>
+            </div>
 
         </div>
       </section>
 
       <!-- //各種競技のボックスーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー -->
 
-      <!-- <h2 class = "title   kyougi-chuui-titel">
-          昼食についての注意
-      </h2>
+      </main>
 
-      <div class = "kyougi-chuui-text">
-      <p>
-        昼食は指定された待機場所の客席で行うこと。<br>
-        レクリエーション中の外出は禁止。<br>
-        必ず昼食を持参すること。ゴミは各自で持ち帰ること。館内のゴミ箱は使用禁止 <br>
-      </p>
-      </div> -->
-    </main>
-
-        <!-- Floating Back to Top Button -->
-    <button id="backToTop" class="back-to-top" title="トップへ戻る">▲</button>
-
-    <!-- Footer -->
-    <div data-site-footer></div>
+    <site-footer></site-footer>
 
   </div> <!--container-->
 
-  <script src="js/jQuery-v3.7.1.js?v=20261016_3"></script>
-  <script src="js/script.js?v=20261016_3"></script>
+  <script>if(window.lucide){lucide.createIcons();}</script>
 </body>
+
+<script src="js/jQuery-v3.7.1.js?v=20261016_3"></script>
+<script src="js/script.js?v=20261016_3"></script>
+
+
 </html>

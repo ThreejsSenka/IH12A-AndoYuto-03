@@ -3,7 +3,7 @@
 /* =========================================================
    RE:CREATION 2026 - ハイブリッド・ロイヤル＆3Dアリーナ
    Index Page Stylesheet
-   去年の重厚ゴージャス（魚のうろこ） × 3Dアリーナ光柱
+   トップページスタイル
    ========================================================= */
 
 /* =========================================================
@@ -1035,13 +1035,13 @@
     gap: 2.2rem;
   }
 
-  /* 開催方針 ＆ レ・クリエイションとは（スリム化 ＆ 背景フロスト透過） */
+  /* 開催方針 ＆ レ・クリエイションとは（スリム化 ＆ 背景フロスト透過 / モバイル超高速60fps最適化） */
   .feature-card {
     padding: 1.6rem 1.2rem 1.3rem;
     margin-top: 1.0rem;
-    background: rgba(8, 36, 60, 0.48) !important;
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+    background: rgba(8, 36, 60, 0.62) !important;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
     border: 1px solid rgba(255, 255, 255, 0.28);
     box-shadow: 0 10px 30px rgba(2, 18, 32, 0.4);
     gap: 0.75rem;
@@ -1124,9 +1124,9 @@
 
   .category-card {
     padding: 12px 14px;
-    background: rgba(8, 36, 60, 0.48) !important;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: rgba(8, 36, 60, 0.62) !important;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
     border: 1px solid rgba(255, 255, 255, 0.28);
     border-top: 3.5px solid #FFFFFF;
     box-shadow: 0 8px 24px rgba(2, 18, 32, 0.35);
@@ -1154,9 +1154,9 @@
   .news-container,
   .access-details {
     padding: 1.6rem 1.2rem 1.3rem;
-    background: rgba(8, 36, 60, 0.48) !important;
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+    background: rgba(8, 36, 60, 0.62) !important;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
     border: 1px solid rgba(255, 255, 255, 0.28);
     border-radius: 16px;
   }

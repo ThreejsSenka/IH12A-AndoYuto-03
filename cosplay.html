@@ -9,26 +9,15 @@
   <title>コスプレ大会 | RE:CREATION</title>
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
-  <script src="js/site-shell.js?v=20261019_1" defer></script>
+  <script src="js/components.js?v=20261016_3"></script>
 </head>
 
 <body class="page-cosplay">
 
   <!-- 3Dアリーナ全画面背景Canvas（他ページ・ランキングと100%統一） -->
-  <canvas id="arena-grid-canvas"></canvas>
-  <canvas id="god-rays-canvas"></canvas>
-  <div class="skylight-ambient-glow"></div>
-  <div class="skylight-roof-strip"></div>
+<div id="container">
 
-
-
-  <div id="container">
-
-    <!-- GLOBAL FLOATING HEADER -->
-    <div data-site-header></div>
-
-    <!-- Mobile Navigation Drawer -->
-    <div data-site-mobile-nav></div>
+    <site-header></site-header>
 
     <!-- Breadcrumb -->
     <div class="breadcrumb">
@@ -40,7 +29,7 @@
     <!-- Main Content -->
     <main class="main cos-main">
 
-      <!-- 1. 原作完全準拠タイトル -->
+      <!-- タイトル -->
       <div class="cos-title ">
         <div class="page-symbol-badge">
           <div class="symbol-pod">
@@ -83,7 +72,7 @@
           </ul>
         </div>
 
-        <!-- 5. コスプレ大会の注意事項 ＆ 原作NG図 -->
+        <!-- 注意事項 -->
         <div class="cos-attention cos-card-block">
           <h3 class="cos-attention-title cos-attention-title1">コスプレ大会の注意事項</h3>
           <ul class="attention-list">
@@ -175,16 +164,18 @@
 
     </main>
 
-    <!-- Floating Back to Top Button -->
-    <button id="backToTop" class="back-to-top" title="トップへ戻る"><i data-lucide="chevron-up"></i></button>
-
-    <!-- Footer -->
-    <div data-site-footer></div>
+    <site-footer></site-footer>
 
   </div> <!--container-->
 
   <script src="js/jQuery-v3.7.1.js?v=20261016_3"></script>
   <script src="js/script.js?v=20261016_3"></script>
+  <script>
+    if (window.lucide) {
+      lucide.createIcons();
+    }
+  </script>
+
 </body>
 
 </html>

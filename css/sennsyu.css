@@ -266,6 +266,8 @@ body {
     padding: 1.6rem 1.0rem;
     border-radius: 16px;
     margin-bottom: 2rem;
+    backdrop-filter: blur(4px) !important;
+    -webkit-backdrop-filter: blur(4px) !important;
   }
   .sennsyu-title h2 {
     font-size: clamp(1.5rem, 5.5vw, 1.8rem);
@@ -281,6 +283,8 @@ body {
   }
   .item {
     border-radius: 14px;
+    backdrop-filter: blur(4px) !important;
+    -webkit-backdrop-filter: blur(4px) !important;
   }
   .trigger {
     padding: 14px 18px;

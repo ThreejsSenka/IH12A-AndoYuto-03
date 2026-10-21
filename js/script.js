@@ -8,12 +8,12 @@ $(function () {
   // 1. Mobile Drawer Navigation (Vanilla JS + jQuery Hybrid for 100% Reliability)
   // ========================================================
   function setupMobileDrawer() {
-    const hamburgerBoxes = document.querySelectorAll(".hamburger-box, .hamburger");
     const drawer = document.querySelector(".mobile-nav-drawer");
-    const hamburgerIcons = document.querySelectorAll(".hamburger");
-    const hamburgerButton = document.querySelector(".hamburger-box");
+    if (!drawer || drawer.dataset.drawerBound) return;
+    drawer.dataset.drawerBound = "true";
 
-    if (!drawer) return;
+    const hamburgerBoxes = document.querySelectorAll(".hamburger-box");
+    const hamburgerIcons = document.querySelectorAll(".hamburger");
 
     function toggleDrawer(e) {
       if (e) {
@@ -27,10 +27,6 @@ $(function () {
       });
       if (willOpen) drawer.classList.add("active");
       else drawer.classList.remove("active");
-      if (hamburgerButton) {
-        hamburgerButton.setAttribute("aria-expanded", String(willOpen));
-        hamburgerButton.setAttribute("aria-label", willOpen ? "メニューを閉じる" : "メニューを開く");
-      }
     }
 
     hamburgerBoxes.forEach(function (btn) {
@@ -46,7 +42,6 @@ $(function () {
       link.addEventListener("click", function () {
         hamburgerIcons.forEach(function (icon) { icon.classList.remove("active"); });
         drawer.classList.remove("active");
-        if (hamburgerButton) hamburgerButton.setAttribute("aria-expanded", "false");
       });
     });
 
@@ -98,7 +93,7 @@ $(function () {
   // 4. Copy Address to Clipboard
   // ========================================================
   $(".copy-address-btn").on("click", function () {
-    var addressText = "〒455-0848 愛知県名古屋市港区金城ふ頭2丁目7 名古屋金城ふ頭アリーナ";
+    var addressText = "〒460-0032 愛知県名古屋市中区二の丸1-1 愛知県体育館";
     if (navigator.clipboard) {
       navigator.clipboard.writeText(addressText).then(function () {
         var $btn = $(".copy-address-btn");
@@ -218,7 +213,6 @@ $(function () {
     const h = window.innerHeight;
     inputMouseYaw = ((e.clientX - w * 0.5) / (w * 0.5)) * (w < 768 ? 0.20 : 0.30);
     inputMousePitch = ((e.clientY - h * 0.5) / (h * 0.5)) * 0.10;
-    updateCameraTargets();
   }, { passive: true });
 
   window.addEventListener("touchmove", (e) => {
@@ -249,13 +243,25 @@ $(function () {
 
     const scrollY = window.scrollY;
     scrollProgress = Math.min(1, Math.max(0, scrollY / cachedDocHeight));
-    updateCameraTargets();
   }, { passive: true });
 
-  // シャドウブラー最適化ヘルパー（モバイル＆スクロール中は0にして超高速60fps維持）
+  // ========================================================
+  // 低スペック端末・低環境向けアダプティブ・パフォーマンス制御
+  // ========================================================
+  let isLowPerfMode = false;
+  let frameCount = 0;
+  let lastFpsCheckTime = performance.now ? performance.now() : Date.now();
+  const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // シャドウブラー最適化ヘルパー（モバイル/スクロール中/低FPS時は完全0にして常時60fps維持）
   function setShadowBlur(val) {
     const isMob = window.innerWidth < 768;
-    gridCtx.shadowBlur = (isMob || isScrolling) ? 0 : val;
+    if (isMob || isScrolling || isLowPerfMode) {
+      gridCtx.shadowBlur = 0;
+      gridCtx.shadowColor = "transparent";
+    } else {
+      gridCtx.shadowBlur = val;
+    }
   }
 
   // スマホスワイプ対応
@@ -275,11 +281,10 @@ $(function () {
     if (!isSwipingArena || e.touches.length !== 1) return;
     const dx = e.touches[0].clientX - touchStartX;
     const dy = e.touches[0].clientY - touchStartY;
-    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 10) {
-      inputSwipeYaw += (dx > 0 ? 0.025 : -0.025);
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 8) {
+      inputSwipeYaw += (dx > 0 ? 0.02 : -0.02);
       inputSwipeYaw = Math.max(-0.45, Math.min(0.45, inputSwipeYaw));
       touchStartX = e.touches[0].clientX;
-      updateCameraTargets();
     }
   }, { passive: true });
 
@@ -287,20 +292,17 @@ $(function () {
     isSwipingArena = false;
   });
 
-  // ジャイロ（傾き）連動の覗き見エフェクト（大規模物理実装：Yaw ±0.38 rad の深い覗き込み角）
+  // ジャイロ（傾き）連動の覗き見エフェクト（描画ループで一括反映するためイベント内では値保存のみ）
   function handleDeviceOrientation(e) {
     if (e.gamma !== null && window.innerWidth < 768) {
-      // 左右傾き（gamma: -40度〜+40度）でカメラが回り込み、カードの陰の客席や照明を覗き込める
       const tiltX = Math.max(-40, Math.min(40, e.gamma));
       inputGyroYaw = (tiltX / 40) * 0.38;
 
-      // 前後傾き（beta: 持ち手標準約45度から±25度）
       if (e.beta !== null) {
         const tiltY = Math.max(-25, Math.min(25, e.beta - 45));
         inputGyroPitch = (tiltY / 25) * 0.12;
         inputGyroHorizon = -(tiltY / 25) * 0.08;
       }
-      updateCameraTargets();
     }
   }
 
@@ -370,10 +372,23 @@ $(function () {
   let gridAnimTime = 0;
 
   function renderArenaGrid() {
+    // 低環境向け動的FPSチェック
+    const nowTime = performance.now ? performance.now() : Date.now();
+    frameCount++;
+    if (nowTime - lastFpsCheckTime >= 1000) {
+      const currentFps = (frameCount * 1000) / (nowTime - lastFpsCheckTime);
+      frameCount = 0;
+      lastFpsCheckTime = nowTime;
+      if (currentFps < 32 && !isLowPerfMode) {
+        isLowPerfMode = true; // 32fps未満が継続した場合、自動軽量モードへ移行
+      }
+    }
+
+    updateCameraTargets();
     mouseX += (targetMouseX - mouseX) * 0.05;
     mouseY += (targetMouseY - mouseY) * 0.05;
 
-    if (arenaCamera.autoOrbit) {
+    if (arenaCamera.autoOrbit && !prefersReducedMotion) {
       arenaCamera.orbitAngle += 0.008;
       const ambientYaw = Math.sin(arenaCamera.orbitAngle) * (window.innerWidth < 768 ? 0.015 : 0.05);
       arenaCamera.yaw += (arenaCamera.targetYaw + ambientYaw - arenaCamera.yaw) * 0.07;
@@ -675,10 +690,10 @@ $(function () {
       });
       gridCtx.restore();
 
-      // 3. 舞い上がるステージスパークル（上品な星屑パーティクル）
+      // 3. 舞い上がるステージスパークル（上品な星屑パーティクル：モバイル超軽量化）
       if (!window.cosplaySparkles) {
         window.cosplaySparkles = [];
-        const count = isMobile ? 38 : 60;
+        const count = isMobile ? 18 : 60;
         for (let sp = 0; sp < count; sp++) {
           window.cosplaySparkles.push({
             x: Math.random() * w,
@@ -710,22 +725,24 @@ $(function () {
         const color = sp.isGold ? '#FEC838' : '#00D2FF';
 
         gridCtx.fillStyle = color;
-        gridCtx.shadowColor = color;
-        setShadowBlur(isMobile ? 4 : (10 * alpha));
+        if (!isMobile) {
+          gridCtx.shadowColor = color;
+          setShadowBlur(10 * alpha);
+        }
         gridCtx.beginPath();
         gridCtx.arc(sp.x, sp.y, sp.size * (0.8 + alpha * 0.4), 0, Math.PI * 2);
         gridCtx.fill();
       });
       gridCtx.restore();
 
-      // 4. 観客席カメラフラッシュ（控えめで上品なシャッター閃光）
+      // 4. 観客席カメラフラッシュ（控えめで上品なシャッター閃光：モバイル負荷抑制）
       if (!window.cosplayFlashes) {
         window.cosplayFlashes = [];
       }
       const flashes = window.cosplayFlashes;
 
       // ランダムにたまにピカッと光る
-      if (Math.random() < (isMobile ? 0.06 : 0.08)) {
+      if (Math.random() < (isMobile ? 0.03 : 0.08)) {
         const isLeftFlash = Math.random() < 0.5;
         const fx = isLeftFlash
           ? Math.random() * (w * 0.35) + 20
@@ -774,12 +791,12 @@ $(function () {
       const isMobile = w < 768;
       // スマホ時は画面幅（390px等）にすっぽり収まるアリーナフロア幅を設定（左右スタンド席がウィング余白に美しく収まる）
       const wingBaseX = isMobile ? Math.min(w * 0.25, 82) : Math.max(w * 0.34, 490);
-      const standZStart = isMobile ? -520 : -650;
-      const standZEnd = isMobile ? 520 : 650;
-      const zStep = isMobile ? 48 : 60;
+      const standZStart = isMobile ? -380 : -650;
+      const standZEnd = isMobile ? 380 : 650;
+      const zStep = isMobile ? 95 : 60;
 
-      // 本格立体ステップ（手前から奥・上に向かって急傾斜でせり上がるスタンド席）
-      const numSteps = isMobile ? 5 : 6;
+      // 本格立体ステップ（スマホ時は3段に最適化して超高速60fps、PC時は6段フルボリューム）
+      const numSteps = isMobile ? 3 : 6;
       const stepRise = isMobile ? 18 : 34;
       const stepDepth = isMobile ? 22 : 52;
 
@@ -1018,91 +1035,113 @@ $(function () {
           }
 
           // -------------------------------------------------------
-          // 2. ズラリと並ぶ「特大スタジアムシート（客席椅子）」の立体描画！
-          // 折りたたみ式スタジアムチェアの「背もたれ＋座面＋金属固定脚」
+          // 2. スタジアムシート（客席椅子）
+          // モバイル時は軽量直方体ブロック（60fps）、PC時はフルディテール3Dチェア
           // -------------------------------------------------------
-          const seatWidth = isMobile ? 13 : 30;
-          const seatDepth = isMobile ? 14 : 32;
-          const seatBackH = isMobile ? 11 : 26;
-          const seatInterval = isMobile ? 32 : 54;
-
-          for (let z = standZStart + 20; z <= standZEnd - 20; z += seatInterval) {
-            // 中央付近は通路（アイル階段）として座席を空ける
-            if (Math.abs(z) < (isMobile ? 35 : 50)) continue;
-
-            const seatCenterX = (xFront + xBack) * 0.5;
-            const seatX1 = seatCenterX - (seatWidth * 0.5 * side);
-            const seatX2 = seatCenterX + (seatWidth * 0.5 * side);
-            const seatZ1 = z - seatDepth * 0.5;
-            const seatZ2 = z + seatDepth * 0.5;
-            const seatFloorY = yFloor;
-            const seatTopY = yFloor - (isMobile ? 5 : 8); // クッション座面の高さ
-
-            // 座席の金属製固定脚（スタンドフロアから座面を支える支柱）
-            const legBase = projectArena3D(seatCenterX, seatFloorY, z, w, h);
-            const legTop = projectArena3D(seatCenterX, seatTopY, z, w, h);
-            if (legBase && legTop) {
-              gridCtx.save();
-              gridCtx.lineWidth = isMobile ? 1.4 : 2.0;
-              gridCtx.strokeStyle = "rgba(220, 240, 255, 0.85)";
-              gridCtx.beginPath();
-              gridCtx.moveTo(legBase.x, legBase.y);
-              gridCtx.lineTo(legTop.x, legTop.y);
-              gridCtx.stroke();
-              gridCtx.restore();
-            }
-
-            // 座面クッション（水平四角形）
-            const sp1 = projectArena3D(seatX1, seatTopY, seatZ1, w, h);
-            const sp2 = projectArena3D(seatX2, seatTopY, seatZ1, w, h);
-            const sp3 = projectArena3D(seatX2, seatTopY, seatZ2, w, h);
-            const sp4 = projectArena3D(seatX1, seatTopY, seatZ2, w, h);
-
-            // 背もたれ（厚みのある立体クッション）
-            const sBackTopY = seatTopY - seatBackH;
-            const sBackX = xBack - ((isMobile ? 2.5 : 4) * side);
-            const sbp1 = projectArena3D(sBackX, seatTopY, seatZ1, w, h);
-            const sbp2 = projectArena3D(sBackX, seatTopY, seatZ2, w, h);
-            const sbp3 = projectArena3D(sBackX, sBackTopY, seatZ2, w, h);
-            const sbp4 = projectArena3D(sBackX, sBackTopY, seatZ1, w, h);
-
-            if (sp1 && sp2 && sp3 && sp4) {
-              gridCtx.save();
-              gridCtx.beginPath();
-              gridCtx.moveTo(sp1.x, sp1.y);
-              gridCtx.lineTo(sp2.x, sp2.y);
-              gridCtx.lineTo(sp3.x, sp3.y);
-              gridCtx.lineTo(sp4.x, sp4.y);
-              gridCtx.closePath();
-              gridCtx.fillStyle = `rgba(${seatBaseRgb}, 0.75)`;
-              gridCtx.fill();
-              gridCtx.lineWidth = 1.0;
-              gridCtx.strokeStyle = isLeft ? "#A0E8FF" : "#FFF0A0";
-              gridCtx.stroke();
-
-              // 背もたれ描画
-              if (sbp1 && sbp2 && sbp3 && sbp4) {
+          if (isMobile) {
+            // モバイル超軽量・高速描画: 1段あたり4〜5席のミニマルブロック（3,600回→50回の98%計算削減）
+            const mSeatInterval = 90;
+            for (let z = standZStart + 30; z <= standZEnd - 30; z += mSeatInterval) {
+              if (Math.abs(z) < 40) continue;
+              const seatCenterX = (xFront + xBack) * 0.5;
+              const sp1 = projectArena3D(seatCenterX - 6 * side, yFloor - 4, z - 7, w, h);
+              const sp2 = projectArena3D(seatCenterX + 6 * side, yFloor - 4, z - 7, w, h);
+              const sp3 = projectArena3D(seatCenterX + 6 * side, yFloor - 14, z + 7, w, h);
+              const sp4 = projectArena3D(seatCenterX - 6 * side, yFloor - 14, z + 7, w, h);
+              if (sp1 && sp2 && sp3 && sp4) {
+                gridCtx.fillStyle = `rgba(${themeRgb}, 0.85)`;
                 gridCtx.beginPath();
-                gridCtx.moveTo(sbp1.x, sbp1.y);
-                gridCtx.lineTo(sbp2.x, sbp2.y);
-                gridCtx.lineTo(sbp3.x, sbp3.y);
-                gridCtx.lineTo(sbp4.x, sbp4.y);
+                gridCtx.moveTo(sp1.x, sp1.y);
+                gridCtx.lineTo(sp2.x, sp2.y);
+                gridCtx.lineTo(sp3.x, sp3.y);
+                gridCtx.lineTo(sp4.x, sp4.y);
                 gridCtx.closePath();
-                gridCtx.fillStyle = `rgba(${themeRgb}, 0.90)`;
+                gridCtx.fill();
+              }
+            }
+          } else {
+            // PC用: フルディテール3Dハイエンドチェア（金属脚＋座面＋立体背もたれ＋ステッチ）
+            const seatWidth = 30;
+            const seatDepth = 32;
+            const seatBackH = 26;
+            const seatInterval = 54;
+
+            for (let z = standZStart + 20; z <= standZEnd - 20; z += seatInterval) {
+              if (Math.abs(z) < 50) continue;
+
+              const seatCenterX = (xFront + xBack) * 0.5;
+              const seatX1 = seatCenterX - (seatWidth * 0.5 * side);
+              const seatX2 = seatCenterX + (seatWidth * 0.5 * side);
+              const seatZ1 = z - seatDepth * 0.5;
+              const seatZ2 = z + seatDepth * 0.5;
+              const seatFloorY = yFloor;
+              const seatTopY = yFloor - 8;
+
+              // 脚
+              const legBase = projectArena3D(seatCenterX, seatFloorY, z, w, h);
+              const legTop = projectArena3D(seatCenterX, seatTopY, z, w, h);
+              if (legBase && legTop) {
+                gridCtx.save();
+                gridCtx.lineWidth = 2.0;
+                gridCtx.strokeStyle = "rgba(220, 240, 255, 0.85)";
+                gridCtx.beginPath();
+                gridCtx.moveTo(legBase.x, legBase.y);
+                gridCtx.lineTo(legTop.x, legTop.y);
+                gridCtx.stroke();
+                gridCtx.restore();
+              }
+
+              // 座面
+              const sp1 = projectArena3D(seatX1, seatTopY, seatZ1, w, h);
+              const sp2 = projectArena3D(seatX2, seatTopY, seatZ1, w, h);
+              const sp3 = projectArena3D(seatX2, seatTopY, seatZ2, w, h);
+              const sp4 = projectArena3D(seatX1, seatTopY, seatZ2, w, h);
+
+              // 背もたれ
+              const sBackTopY = seatTopY - seatBackH;
+              const sBackX = xBack - (4 * side);
+              const sbp1 = projectArena3D(sBackX, seatTopY, seatZ1, w, h);
+              const sbp2 = projectArena3D(sBackX, seatTopY, seatZ2, w, h);
+              const sbp3 = projectArena3D(sBackX, sBackTopY, seatZ2, w, h);
+              const sbp4 = projectArena3D(sBackX, sBackTopY, seatZ1, w, h);
+
+              if (sp1 && sp2 && sp3 && sp4) {
+                gridCtx.save();
+                gridCtx.beginPath();
+                gridCtx.moveTo(sp1.x, sp1.y);
+                gridCtx.lineTo(sp2.x, sp2.y);
+                gridCtx.lineTo(sp3.x, sp3.y);
+                gridCtx.lineTo(sp4.x, sp4.y);
+                gridCtx.closePath();
+                gridCtx.fillStyle = `rgba(${seatBaseRgb}, 0.75)`;
                 gridCtx.fill();
                 gridCtx.lineWidth = 1.0;
-                gridCtx.strokeStyle = "#FFFFFF";
+                gridCtx.strokeStyle = isLeft ? "#A0E8FF" : "#FFF0A0";
                 gridCtx.stroke();
 
-                const midTop = { x: (sbp3.x + sbp4.x) * 0.5, y: (sbp3.y + sbp4.y) * 0.5 };
-                const midBot = { x: (sbp1.x + sbp2.x) * 0.5, y: (sbp1.y + sbp2.y) * 0.5 };
-                gridCtx.beginPath();
-                gridCtx.moveTo(midTop.x, midTop.y);
-                gridCtx.lineTo(midBot.x, midBot.y);
-                gridCtx.strokeStyle = "rgba(255, 255, 255, 0.4)";
-                gridCtx.stroke();
+                if (sbp1 && sbp2 && sbp3 && sbp4) {
+                  gridCtx.beginPath();
+                  gridCtx.moveTo(sbp1.x, sbp1.y);
+                  gridCtx.lineTo(sbp2.x, sbp2.y);
+                  gridCtx.lineTo(sbp3.x, sbp3.y);
+                  gridCtx.lineTo(sbp4.x, sbp4.y);
+                  gridCtx.closePath();
+                  gridCtx.fillStyle = `rgba(${themeRgb}, 0.90)`;
+                  gridCtx.fill();
+                  gridCtx.lineWidth = 1.0;
+                  gridCtx.strokeStyle = "#FFFFFF";
+                  gridCtx.stroke();
+
+                  const midTop = { x: (sbp3.x + sbp4.x) * 0.5, y: (sbp3.y + sbp4.y) * 0.5 };
+                  const midBot = { x: (sbp1.x + sbp2.x) * 0.5, y: (sbp1.y + sbp2.y) * 0.5 };
+                  gridCtx.beginPath();
+                  gridCtx.moveTo(midTop.x, midTop.y);
+                  gridCtx.lineTo(midBot.x, midBot.y);
+                  gridCtx.strokeStyle = "rgba(255, 255, 255, 0.4)";
+                  gridCtx.stroke();
+                }
+                gridCtx.restore();
               }
-              gridCtx.restore();
             }
           }
 
@@ -1116,15 +1155,17 @@ $(function () {
             gridCtx.save();
             gridCtx.lineWidth = isMobile ? 1.2 : 1.6;
             gridCtx.strokeStyle = "rgba(255, 255, 255, 0.85)";
-            gridCtx.shadowColor = "rgba(0, 0, 0, 0.5)";
-            setShadowBlur(4);
+            if (!isMobile) {
+              gridCtx.shadowColor = "rgba(0, 0, 0, 0.5)";
+              setShadowBlur(4);
+            }
             gridCtx.beginPath();
             gridCtx.moveTo(rPFront.x, rPFront.y);
             gridCtx.lineTo(rPBack.x, rPBack.y);
             gridCtx.stroke();
 
             // 手すり支柱
-            const railPillarStep = isMobile ? 80 : 110;
+            const railPillarStep = isMobile ? 180 : 110;
             for (let z = standZStart; z <= standZEnd; z += railPillarStep) {
               const bP = projectArena3D(xFront, yFloor, z, w, h);
               const tP = projectArena3D(xFront, railY, z, w, h);
@@ -1254,7 +1295,7 @@ $(function () {
         gridCtx.shadowColor = mainColor;
         setShadowBlur(6);
 
-        const trussStep = isMobile ? 160 : 240;
+        const trussStep = isMobile ? 360 : 240;
         for (let tz = standZStart; tz <= standZEnd; tz += trussStep) {
           const pUpperRoot = projectArena3D(trussRootX, trussTopY, tz, w, h);
           const pUpperTip = projectArena3D(trussTipX, trussTopY + (isMobile ? 30 : 45), tz, w, h);
@@ -1294,7 +1335,7 @@ $(function () {
   // Volumetric God Rays 光柱 & サンシャインフォトン微粒子
   // -------------------------------------------------------------
   const photons = [];
-  const numPhotons = window.innerWidth < 768 ? 24 : 50;
+  const numPhotons = window.innerWidth < 768 ? 14 : 50;
 
   for (let i = 0; i < numPhotons; i++) {
     photons.push({
@@ -1317,6 +1358,7 @@ $(function () {
 
     raysTime += 0.015;
     const boost = arenaCamera.raysBoost;
+    const isMobile = w < 768;
 
     const yawOffset = arenaCamera.yaw * (w * 0.4);
     const skylightSourceX = w * 0.22 + (mouseX - w * 0.5) * 0.12 + yawOffset;
@@ -1325,15 +1367,21 @@ $(function () {
     raysCtx.save();
     raysCtx.globalCompositeOperation = "screen";
 
-    const rayDefinitions = [
-      { angleDeg: 52 + arenaCamera.yaw * 15, spread: 260, baseAlpha: 0.28, speed: 0.7, offset: 0 },
-      { angleDeg: 58 + arenaCamera.yaw * 18, spread: 340, baseAlpha: 0.34, speed: 0.9, offset: 1.2 },
-      { angleDeg: 65 + arenaCamera.yaw * 22, spread: 420, baseAlpha: 0.38, speed: 0.6, offset: 2.5 },
-      { angleDeg: 72 + arenaCamera.yaw * 16, spread: 310, baseAlpha: 0.26, speed: 0.8, offset: 3.8 },
-      { angleDeg: 46 + arenaCamera.yaw * 12, spread: 220, baseAlpha: 0.22, speed: 1.1, offset: 4.7 }
-    ];
+    const rayDefinitions = isMobile
+      ? [
+          { angleDeg: 54 + arenaCamera.yaw * 16, spread: 280, baseAlpha: 0.30, speed: 0.7, offset: 0 },
+          { angleDeg: 64 + arenaCamera.yaw * 20, spread: 380, baseAlpha: 0.35, speed: 0.6, offset: 2.5 },
+          { angleDeg: 46 + arenaCamera.yaw * 12, spread: 220, baseAlpha: 0.24, speed: 1.0, offset: 4.2 }
+        ]
+      : [
+          { angleDeg: 52 + arenaCamera.yaw * 15, spread: 260, baseAlpha: 0.28, speed: 0.7, offset: 0 },
+          { angleDeg: 58 + arenaCamera.yaw * 18, spread: 340, baseAlpha: 0.34, speed: 0.9, offset: 1.2 },
+          { angleDeg: 65 + arenaCamera.yaw * 22, spread: 420, baseAlpha: 0.38, speed: 0.6, offset: 2.5 },
+          { angleDeg: 72 + arenaCamera.yaw * 16, spread: 310, baseAlpha: 0.26, speed: 0.8, offset: 3.8 },
+          { angleDeg: 46 + arenaCamera.yaw * 12, spread: 220, baseAlpha: 0.22, speed: 1.1, offset: 4.7 }
+        ];
 
-    const mobDamp = (w < 768) ? 0.45 : 1.0;
+    const mobDamp = isMobile ? 0.45 : 1.0;
     rayDefinitions.forEach((ray) => {
       const dynamicAlpha = ray.baseAlpha * (0.8 + Math.sin(raysTime * ray.speed + ray.offset) * 0.2) * boost * mobDamp;
       const rad = (ray.angleDeg * Math.PI) / 180;

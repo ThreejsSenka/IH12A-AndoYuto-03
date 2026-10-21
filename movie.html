@@ -7,25 +7,41 @@
   <link rel="stylesheet" href="css/common.css?v=20261016_3">
   <link rel="stylesheet" href="css/movie.css?v=20261016_3">
   <title>ムービー | RE:CREATION</title>
-<script src="https://unpkg.com/lucide@latest"></script>
-  <script src="js/site-shell.js?v=20261019_1" defer></script>
+  <script>
+    (function (d) {
+      var config = {
+        kitId: 'yon8bkv',
+        scriptTimeout: 3000,
+        async: true
+      },
+        h = d.documentElement, t = setTimeout(function () { h.className = h.className.replace(/\bwf-loading\b/g, "") + " wf-inactive"; }, config.scriptTimeout), tk = d.createElement("script"), f = false, s = d.getElementsByTagName("script")[0], a; h.className += " wf-loading"; tk.src = 'https://use.typekit.net/' + config.kitId + '.js'; tk.async = true; tk.onload = tk.onreadystatechange = function () { a = this.readyState; if (f || a && a != "complete" && a != "loaded") return; f = true; clearTimeout(t); try { Typekit.load(config) } catch (e) { } }; s.parentNode.insertBefore(tk, s)
+    })(document);
+        (function (d) {
+      var config = {
+        kitId: 'sqx3dfn',
+        scriptTimeout: 3000,
+        async: true
+      },
+        h = d.documentElement, t = setTimeout(function () { h.className = h.className.replace(/\bwf-loading\b/g, "") + " wf-inactive"; }, config.scriptTimeout), tk = d.createElement("script"), f = false, s = d.getElementsByTagName("script")[0], a; h.className += " wf-loading"; tk.src = 'https://use.typekit.net/' + config.kitId + '.js'; tk.async = true; tk.onload = tk.onreadystatechange = function () { a = this.readyState; if (f || a && a != "complete" && a != "loaded") return; f = true; clearTimeout(t); try { Typekit.load(config) } catch (e) { } }; s.parentNode.insertBefore(tk, s)
+    })(document);
+      (function(d) {
+    var config = {
+      kitId: 'knm1jcc',
+      scriptTimeout: 3000,
+      async: true
+    },
+    h=d.documentElement,t=setTimeout(function(){h.className=h.className.replace(/\bwf-loading\b/g,"")+" wf-inactive";},config.scriptTimeout),tk=d.createElement("script"),f=false,s=d.getElementsByTagName("script")[0],a;h.className+=" wf-loading";tk.src='https://use.typekit.net/'+config.kitId+'.js';tk.async=true;tk.onload=tk.onreadystatechange=function(){a=this.readyState;if(f||a&&a!="complete"&&a!="loaded")return;f=true;clearTimeout(t);try{Typekit.load(config)}catch(e){}};s.parentNode.insertBefore(tk,s)
+  })(document);
+  </script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="js/components.js?v=20261016_3"></script>
 </head>
 
 <body class="page-movie">
 
-  <!-- 3DアリーナCanvas（他ページと100%統一） -->
-  <canvas id="arena-grid-canvas"></canvas>
-  <canvas id="god-rays-canvas"></canvas>
-  <div class="skylight-ambient-glow"></div>
-  <div class="skylight-roof-strip"></div>
+<div id="container">
 
-  <div id="container">
-
-    <!-- GLOBAL FLOATING HEADER -->
-    <div data-site-header></div>
-
-    <!-- Mobile Navigation Drawer -->
-    <div data-site-mobile-nav></div>
+    <site-header></site-header>
 
     <!-- Breadcrumb -->
     <div class="breadcrumb">
@@ -38,18 +54,15 @@
     <main class="main movie-main">
 
       <section class="movie-section">
-        <!-- 原作完全準拠タイトル -->
+        
         <div class="section-title ">
           <h2>ムービー</h2>
           <h3>レ・クリエイションＯＰ</h3>
         </div>
 
-        <!-- =========================================================
-             アリーナ特設 3Dジャイアントビジョン（大型LEDジャンボトロン）
-             ※完全汎用設計：動画ファイルを後から差し替えても自動で完璧にフィットします
-             ========================================================= -->
+        <!-- 動画プレイヤー -->
         <div class="jumbotron-container">
-          <!-- 天井リギングケーブル（スチール吊り下げワイヤー＆上部トラス） -->
+          <!-- リギング装飾 -->
           <div class="jumbotron-rigging">
             <div class="rigging-cable cable-left"></div>
             <div class="rigging-cable cable-center-left"></div>
@@ -58,9 +71,9 @@
             <div class="rigging-truss-bar"></div>
           </div>
 
-          <!-- ジャンボトロン本体フレーム -->
+          <!-- ビジョンフレーム -->
           <div class="jumbotron-frame">
-            <!-- ビジョン上部ステータスバー -->
+            <!-- ステータスバー -->
             <div class="jumbotron-top-bar">
               <div class="vision-status">
                 <span class="status-indicator-dot"></span>
@@ -71,17 +84,17 @@
               </div>
             </div>
 
-            <!-- スクリーンエリア（どんな比率・解像度の動画でも美しく自動フィット） -->
+            <!-- スクリーンエリア -->
             <div class="jumbotron-screen-wrap" id="jumbotronScreen">
-              <!-- 動画要素（後から動画ファイルを差し替えても自動適応） -->
+              <!-- 動画 -->
               <video id="arenaVideoPlayer" src="./movie/op-movie.mp4" playsinline preload="metadata"></video>
 
-              <!-- 大型センタープレイボタン（待機時・一時停止時にスタイリッシュに表示） -->
+              <!-- 再生ボタン -->
               <button class="center-play-btn" id="centerPlayBtn" aria-label="再生">
                 <i data-lucide="play"></i>
               </button>
 
-              <!-- プロ仕様カスタム・シネマコントローラー -->
+              <!-- コントローラー -->
               <div class="jumbotron-controls" id="jumbotronControls">
                 <!-- プログレスシークバー -->
                 <div class="controls-timeline-wrap" id="timelineWrap">
@@ -92,7 +105,7 @@
                 </div>
 
                 <div class="controls-bar">
-                  <!-- 再生/一時停止 ＆ タイムコード -->
+                  <!-- 再生情報 -->
                   <div class="controls-left">
                     <button class="ctrl-btn" id="playPauseBtn" aria-label="再生/一時停止">
                       <i data-lucide="play" id="playIcon"></i>
@@ -102,7 +115,7 @@
                     </div>
                   </div>
 
-                  <!-- 音量・フルスクリーン -->
+                  <!-- コントロールボタン -->
                   <div class="controls-right">
                     <div class="volume-wrap">
                       <button class="ctrl-btn" id="volumeBtn" aria-label="ミュート切替">
@@ -118,7 +131,7 @@
               </div>
             </div>
 
-            <!-- コーナーブラケット装飾（スタジアムハードウェア演出） -->
+            <!-- コーナー装飾 -->
             <div class="corner-bracket corner-tl"></div>
             <div class="corner-bracket corner-tr"></div>
             <div class="corner-bracket corner-bl"></div>
@@ -132,15 +145,14 @@
 
     </main>
 
-        <!-- Floating Back to Top Button -->
-    <button id="backToTop" class="back-to-top" title="トップへ戻る">▲</button>
-
-    <!-- Footer -->
-    <div data-site-footer></div>
+    <site-footer></site-footer>
 
   </div> <!--container-->
 
-  <script src="js/jQuery-v3.7.1.js?v=20261016_3"></script>
-  <script src="js/script.js?v=20261016_3"></script>
+  <script>if(window.lucide){lucide.createIcons();}</script>
 </body>
+
+<script src="js/jQuery-v3.7.1.js?v=20261016_3"></script>
+<script src="js/script.js?v=20261016_3"></script>
+
 </html>

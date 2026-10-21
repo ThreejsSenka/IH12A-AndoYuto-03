@@ -9,7 +9,7 @@
   <title>出場選手 | RE:CREATION 2026</title>
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
-  <script src="js/site-shell.js?v=20261019_1" defer></script>
+  <script src="js/components.js?v=20261016_3"></script>
 </head>
 
 <body class="bg-uroko-cyan">
@@ -19,11 +19,7 @@
 
   <div id="container">
 
-    <!-- GLOBAL FLOATING HEADER (スリム化 58px) -->
-    <div data-site-header></div>
-
-    <!-- Mobile Navigation Drawer -->
-    <div data-site-mobile-nav></div>
+    <site-header></site-header>
 
     <!-- Breadcrumb -->
     <div class="breadcrumb">
@@ -200,16 +196,18 @@
 
     </main>
 
-        <!-- Floating Back to Top Button -->
-    <button id="backToTop" class="back-to-top" title="トップへ戻る">▲</button>
-
-    <!-- Footer -->
-    <div data-site-footer></div>
+    <site-footer></site-footer>
 
   </div> <!--container-->
 
   <script src="js/jQuery-v3.7.1.js?v=20261016_3"></script>
   <script src="js/script.js?v=20261016_3"></script>
+  <script>
+    if (window.lucide) {
+      lucide.createIcons();
+    }
+  </script>
+
 </body>
 
 </html>

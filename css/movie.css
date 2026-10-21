@@ -17,7 +17,7 @@
   z-index: 10;
 }
 
-/* 原作完全準拠 セクションタイトル（他ページと100%統一されたフロストグラスカード） */
+/* セクションタイトル */
 .movie-section .section-title {
   text-align: center;
   background: rgba(255, 255, 255, 0.16);

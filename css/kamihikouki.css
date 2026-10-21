@@ -1,5 +1,14 @@
 @charset "utf-8";
-/* Page-specific assets; shared layout lives in competition.css. */
-.kamihikouki-img { background-image: url("../images/about-kamihikouki.jpg"); }
-.kamihikoukibasyo-img { background-image: url("../images/place-kamihikouki.jpg"); }
-.kamihikouki-kinyuu { background-image: url("../images/kamihikouki-kinyuu.jpg"); }
+
+/* =========================================================
+   紙飛行機専用スタイル (kamihikouki.css)
+   共通レイアウト・タイトル・枠線・詳細ブロックは common.css に集約済み
+   ========================================================= */
+
+.kamihikouki-img {
+  background-image: url(../images/about-kamihikouki.jpg);
+}
+
+.kamihikoukibasyo-img {
+  background-image: url(../images/place-kamihikouki.jpg);
+}

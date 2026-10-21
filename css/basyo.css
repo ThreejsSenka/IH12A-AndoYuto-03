@@ -1,68 +1,9 @@
 @charset "utf-8";
 
 /* =========================================================
-   RE:CREATION - 企画案A：シアン・オーシャン・イマーシブ
-   集合場所 (basyo.css)
-   メインカラー: RGB(44, 159, 216) (#2C9FD8) 全面没入型
+   集合場所・座席専用スタイル (basyo.css)
+   共通レイアウト・タイトル・枠線・カードは common.css に集約済み
    ========================================================= */
-
-.basyo-main {
-  max-width: 1200px;
-  width: 92%;
-  margin: 4rem auto 8rem;
-}
-
-.basyo-title-box {
-  text-align: center;
-  background: rgba(255, 255, 255, 0.16);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border: 2.5px solid rgba(255, 255, 255, 0.45);
-  border-radius: 24px;
-  padding: 3rem 2rem 3.5rem;
-  box-shadow: 0 14px 40px rgba(5, 30, 48, 0.35);
-  margin-bottom: 4rem;
-}
-
-.basyo-title-box h2 {
-  text-align: center;
-  background: none;
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-  border: none;
-  border-radius: 0;
-  padding: 0;
-  box-shadow: none;
-  margin: 0;
-  color: #FFFFFF;
-  font-size: clamp(2.6rem, 5.5vw, 4.2rem);
-  font-weight: 900;
-  text-shadow: 0 3px 15px rgba(0, 0, 0, 0.4);
-}
-
-.basyo-title h3 {
-  font-size: 2.2rem;
-  color: #FFA502;
-  margin: 4rem 0 2rem;
-  font-weight: 900;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  letter-spacing: 1.5px;
-}
-
-.zaseki, .basyo-img, .basyo-img2 {
-  margin: 0 auto 5rem;
-  width: min(1000px, 95%);
-  height: 65vh;
-  min-height: 420px;
-  background-position: center;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-color: rgba(255, 255, 255, 0.95);
-  border: 3px solid rgba(255, 255, 255, 0.7);
-  border-radius: 24px;
-  box-shadow: 0 16px 45px rgba(5, 30, 48, 0.45), 0 0 25px rgba(56, 182, 240, 0.3);
-  transition: transform var(--trans-smooth);
-}
 
 .zaseki {
   background-image: url(../images/zaseki.jpg);
@@ -76,34 +17,19 @@
   background-image: url(../images/map-2-toujitu.jpg);
 }
 
-.basyo-text {
-  background: rgba(255, 255, 255, 0.18);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 2px solid rgba(255, 255, 255, 0.4);
-  border-left: 6px solid #FFA502;
-  border-radius: 18px;
-  padding: 1.8rem 2.2rem;
-  max-width: 800px;
-  margin: 3rem auto;
+.basyo-title h3 {
+  font-size: 2.2rem;
+  color: #FFA502;
   text-align: center;
-  box-shadow: 0 12px 35px rgba(5, 30, 48, 0.35);
-}
-
-.basyo-text h4 {
-  color: #FFFFFF;
-  font-size: 1.25rem;
-  font-weight: 800;
-  line-height: 1.8;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  margin: 4rem 0 2rem;
+  font-weight: 900;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  letter-spacing: 1.5px;
 }
 
 @media screen and (max-width: 680px) {
-  .basyo-main { margin: 1.5rem auto 4.5rem; width: 94%; }
-  .basyo-title-box { padding: 1.6rem 1.0rem; margin-bottom: 2rem; border-radius: 16px; }
-  .basyo-title-box h2 { font-size: clamp(1.5rem, 5.5vw, 1.8rem); }
-  .basyo-title h3 { font-size: 1.25rem; margin: 2.2rem 0 1.0rem; }
-  .basyo-text { padding: 1.2rem 1.4rem; margin: 1.8rem auto; border-radius: 14px; }
-  .basyo-text h4 { font-size: 0.94rem; line-height: 1.7; }
-  .zaseki, .basyo-img, .basyo-img2 { height: 35vh; min-height: 220px; margin: 0 auto 2.5rem; border-radius: 16px; }
+  .basyo-title h3 {
+    font-size: 1.25rem;
+    margin: 2.2rem 0 1.0rem;
+  }
 }

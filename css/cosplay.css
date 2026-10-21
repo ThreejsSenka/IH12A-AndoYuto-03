@@ -393,9 +393,9 @@ body, body.page-cosplay {
     max-width: 334px;
     margin-left: auto;
     margin-right: auto;
-    background: linear-gradient(135deg, rgba(10, 42, 68, 0.36) 0%, rgba(6, 28, 48, 0.30) 100%) !important;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: linear-gradient(135deg, rgba(8, 36, 60, 0.65) 0%, rgba(5, 24, 42, 0.70) 100%) !important;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
   }
   .cos-title h2 {
     font-size: clamp(1.35rem, 5.0vw, 1.65rem);
@@ -413,9 +413,9 @@ body, body.page-cosplay {
     margin-right: auto;
     padding: 1.2rem 1.0rem;
     border-radius: 16px;
-    background: linear-gradient(135deg, rgba(8, 36, 60, 0.34) 0%, rgba(5, 24, 42, 0.30) 100%) !important;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: linear-gradient(135deg, rgba(8, 36, 60, 0.62) 0%, rgba(5, 24, 42, 0.66) 100%) !important;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
     border: 1px solid rgba(255, 255, 255, 0.18);
     box-shadow: 0 12px 35px rgba(2, 18, 32, 0.35);
   }

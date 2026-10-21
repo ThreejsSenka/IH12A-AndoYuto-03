@@ -9,75 +9,17 @@
   <title>トップ | RE:CREATION 2026</title>
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="js/components.js?v=20261016_3"></script>
 </head>
 
 <body>
 
-  <!-- 3DアリーナCanvas（ゾーンB: 体育館3Dグリッド＆光柱） -->
-  <canvas id="arena-grid-canvas"></canvas>
-  <canvas id="god-rays-canvas"></canvas>
-  <div class="skylight-ambient-glow"></div>
-  <div class="skylight-roof-strip"></div>
+<div id="container">
+    <site-header></site-header>
 
-  <div id="container">
-    <!-- ==============================================
-         GLOBAL FLOATING HEADER (スリム化 58px)
-         ============================================== -->
-    <header id="header">
-      <div class="header-container">
-        <div class="header-brand">
-          <a href="index.html">
-            <img src="images/title-text1.png" alt="RE:CREATION">
-            <span class="brand-badge">2026 FESTIVAL</span>
-          </a>
-        </div>
-
-        <nav class="desktop-nav">
-          <ul>
-            <li><a href="index.html" class="active">ホーム</a></li>
-            <li><a href="sennsyu.html">出場選手</a></li>
-            <li><a href="kyougi.html">競技一覧</a></li>
-            <li><a href="basyo.html">集合場所</a></li>
-            <li><a href="cosplay.html">コスプレ大会</a></li>
-            <li><a href="ranking.html">ランキング</a></li>
-          </ul>
-        </nav>
-
-        <div class="header-actions">
-          <div class="hamburger-box" aria-label="メニューを開く">
-            <div class="hamburger">
-              <span></span>
-              <span></span>
-              <span></span>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </header>
-
-    <!-- Mobile Navigation Drawer -->
-    <nav class="mobile-nav-drawer">
-      <ul>
-        <li><a href="index.html"><span><i data-lucide="home"></i> トップ</span> <i data-lucide="chevron-right"></i></a></li>
-        <li><a href="sennsyu.html"><span><i data-lucide="users"></i> 出場選手</span> <i data-lucide="chevron-right"></i></a></li>
-        <li><a href="kyougi.html"><span><i data-lucide="trophy"></i> 競技一覧</span> <i data-lucide="chevron-right"></i></a></li>
-        <li><a href="basyo.html"><span><i data-lucide="map-pin"></i> 集合場所・座席</span> <i data-lucide="chevron-right"></i></a></li>
-        <li><a href="cosplay.html"><span><i data-lucide="sparkles"></i> コスプレ大会</span> <i data-lucide="chevron-right"></i></a></li>
-        <li><a href="ranking.html"><span><i data-lucide="medal"></i> ランキング</span> <i data-lucide="chevron-right"></i></a></li>
-        <li><a href="appli.html"><span><i data-lucide="bell"></i> 呼び出しアプリ</span> <i data-lucide="chevron-right"></i></a></li>
-        <li><a href="cyuui.html"><span><i data-lucide="shield-alert"></i> 注意事項</span> <i data-lucide="chevron-right"></i></a></li>
-        <li><a href="situmonn.html"><span><i data-lucide="help-circle"></i> Q&A (よくある質問)</span> <i data-lucide="chevron-right"></i></a></li>
-        <li><a href="movie.html"><span><i data-lucide="film"></i> ムービー紹介</span> <i data-lucide="chevron-right"></i></a></li>
-      </ul>
-    </nav>
-
-
-    <!-- ==============================================
-         1. HERO STAGE (ゾーンA: 魚のうろこ × ロイヤルネイビー)
-         ============================================== -->
+    <!-- ヒーローステージ（タイトル画面） -->
     <section class="hero-stage">
-      <!-- ホームページ上の方専用 魚のうろこ背景レイヤー -->
+      <!-- ホームページ上部専用 魚のうろこレイヤー -->
       <div class="hero-uroko-layer"></div>
 
       <!-- ヒーロー背景ランナーピクトグラム（ウォーターマーク） -->
@@ -93,7 +35,7 @@
           </div>
           <div class="hero-pill pill-venue hero-pill-graphic hero-place-pill">
             <i data-lucide="map-pin" class="badge-icon"></i>
-            <img src="./hero-image-2026/hero-img-place-2026-crop.png" alt="金城ふ頭アリーナ" class="hero-meta-img meta-place-img">
+            <img src="./hero-image-2026/hero-img-place-2026-crop.png" alt="愛知県体育館" class="hero-meta-img meta-place-img">
           </div>
         </div>
 
@@ -103,12 +45,12 @@
 
         <p class="hero-tagline">CREATE THE UNFORGETTABLE MOMENTS</p>
 
-        <!-- 4大クイックアクセス・ショートカットボタン（rec-img-2026公式アイコン使用） -->
+        <!-- 4大クイックアクセス・ショートカットボタン -->
         <div class="hero-quick-actions">
           <a href="sennsyu.html" class="hero-action-btn">
             <div class="btn-icon-wrap">
-              <img src="rec-img-2026/book_white.png" alt="名簿アイコン" class="btn-custom-icon icon-default">
-              <img src="rec-img-2026/book_navy.png" alt="名簿アイコン" class="btn-custom-icon icon-hover">
+              <img src="recreation2026_icon/book_white.png" alt="名簿アイコン" class="btn-custom-icon icon-default">
+              <img src="recreation2026_icon/book_navy.png" alt="名簿アイコン" class="btn-custom-icon icon-hover">
             </div>
             <span class="btn-label">出場選手名簿</span>
             <span class="btn-hint">全60クラス名簿PDF</span>
@@ -116,8 +58,8 @@
 
           <a href="#categories-section" class="hero-action-btn" id="btnScrollKyougi">
             <div class="btn-icon-wrap">
-              <img src="rec-img-2026/trophy-white.png" alt="競技アイコン" class="btn-custom-icon icon-default">
-              <img src="rec-img-2026/trophy-navy.png" alt="競技アイコン" class="btn-custom-icon icon-hover">
+              <img src="recreation2026_icon/pictogram_white.png" alt="競技アイコン" class="btn-custom-icon icon-default">
+              <img src="recreation2026_icon/pictogram_navy.png" alt="競技アイコン" class="btn-custom-icon icon-hover">
             </div>
             <span class="btn-label">競技ルール一覧</span>
             <span class="btn-hint">全5種目＆対戦表</span>
@@ -125,8 +67,8 @@
 
           <a href="ranking.html" class="hero-action-btn">
             <div class="btn-icon-wrap">
-              <img src="rec-img-2026/crown_white.png" alt="ランキングアイコン" class="btn-custom-icon icon-default">
-              <img src="rec-img-2026/crown_navy.png" alt="ランキングアイコン" class="btn-custom-icon icon-hover">
+              <img src="recreation2026_icon/crown_white.png" alt="ランキングアイコン" class="btn-custom-icon icon-default">
+              <img src="recreation2026_icon/crown_navy.png" alt="ランキングアイコン" class="btn-custom-icon icon-hover">
             </div>
             <span class="btn-label">総合ランキング</span>
             <span class="btn-hint">得点上位10位速報</span>
@@ -134,41 +76,19 @@
 
           <a href="situmonn.html" class="hero-action-btn">
             <div class="btn-icon-wrap">
-              <img src="rec-img-2026/q_and_a_white.png" alt="Q&Aアイコン" class="btn-custom-icon icon-default">
-              <img src="rec-img-2026/q_and_a_navy.png" alt="Q&Aアイコン" class="btn-custom-icon icon-hover">
+              <img src="recreation2026_icon/q_and_a_white.png" alt="Q&Aアイコン" class="btn-custom-icon icon-default">
+              <img src="recreation2026_icon/q_and_a_navy.png" alt="Q&Aアイコン" class="btn-custom-icon icon-hover">
             </div>
             <span class="btn-label">よくある質問</span>
             <span class="btn-hint">Q&amp;A・当日の疑問解決</span>
           </a>
         </div>
-
-        <!-- 公式PVショートカット導線 -->
-        <div class="hero-sub-actions">
-          <a href="#movie-section" class="hero-movie-pill-btn" id="btnScrollMovie">
-            <i data-lucide="play-circle" style="width: 17px; height: 17px;"></i>
-            <span>公式ムービー（PV）を見る</span>
-            <i data-lucide="chevron-down" style="width: 15px; height: 15px;"></i>
-          </a>
-        </div>
-
-        <a href="#main-content" class="scroll-indicator" aria-label="下へスクロール">
-          <span>SCROLL TO EXPLORE</span>
-          <div class="scroll-chevron"></div>
-        </a>
-
       </div>
     </section>
 
-
-    <!-- ==============================================
-         2. MAIN WRAPPER (ゾーンB: 3Dアリーナ光柱が背景に透過)
-         ============================================== -->
     <main id="main-content" class="main-wrapper">
 
-      <!-- ==========================================
-           FEATURE GRID (開催方針 & レ・クリエイションとは)
-           ※余計なボタンを削除し、大人の洗練された組版へ
-           ========================================== -->
+      <!-- 開催方針 & レ・クリエイションとは -->
       <section class="feature-grid">
 
         <div class="glass-card feature-card">
@@ -191,14 +111,12 @@
       </section>
 
 
-      <!-- ==========================================
-           NEWS SECTION (QUEST LOG // 最新情報)
-           ========================================== -->
+      <!-- NEWS SECTION (QUEST LOG // 最新情報) -->
       <section class="glass-card news-container">
         <span class="news-badge">LATEST NEWS</span>
         <div class="news-list">
 
-          <!-- 静的なお知らせ（リンクなし：矢印なし・ボタンのように反応しない） -->
+          <!-- お知らせ -->
           <div class="news-item news-item-static">
             <span class="news-tag">NEW</span>
             <p class="news-text">WEBサイトオープンしました！</p>
@@ -222,9 +140,7 @@
       </section>
 
 
-      <!-- ==========================================
-           BANNER (Calling App Showcase)
-           ========================================== -->
+      <!-- BANNER (Calling App Showcase) -->
       <section class="glass-card app-banner-card">
         <div class="app-banner-info">
           <h3><i data-lucide="bell" style="width: 24px; height: 24px; vertical-align: -3px; margin-right: 6px; color: var(--color-accent);"></i> 呼び出しアプリのご案内</h3>
@@ -241,9 +157,7 @@
       </section>
 
 
-      <!-- ==========================================
-           OFFICIAL MOVIE (Cinema Theater Mode)
-           ========================================== -->
+      <!-- OFFICIAL MOVIE (Cinema Theater Mode) -->
       <section id="movie-section" class="movie-section">
         <h2 class="section-heading"><i data-lucide="film" style="width: 32px; height: 32px; vertical-align: -5px; margin-right: 8px; color: var(--color-accent);"></i> 公式ムービー</h2>
         <p class="section-subheading">OFFICIAL PROMOTIONAL VIDEO</p>
@@ -254,9 +168,7 @@
       </section>
 
 
-      <!-- ==========================================
-           当日の詳細 (6大コンテンツ アイコングリッド)
-           ========================================== -->
+      <!-- 当日の詳細 (6大コンテンツ アイコングリッド) -->
       <section id="categories-section" class="categories-section">
         <h2 class="section-heading"><i data-lucide="zap" style="width: 32px; height: 32px; vertical-align: -5px; margin-right: 8px; color: var(--color-accent);"></i> 当日の詳細</h2>
         <p class="section-subheading">EVENT CONTENTS & GUIDES</p>
@@ -321,9 +233,7 @@
       </section>
 
 
-      <!-- ==========================================
-           SCHEDULE SECTION
-           ========================================== -->
+      <!-- SCHEDULE SECTION -->
       <section id="schedule-section" class="schedule-section">
         <h2 class="section-heading"><i data-lucide="calendar" style="width: 32px; height: 32px; vertical-align: -5px; margin-right: 8px; color: var(--color-accent);"></i> スケジュール</h2>
         <p class="section-subheading">EVENT TIMETABLE</p>
@@ -334,9 +244,7 @@
       </section>
 
 
-      <!-- ==========================================
-           ACCESS & VENUE MAP
-           ========================================== -->
+      <!-- ACCESS & VENUE MAP -->
       <section id="access-section" class="access-section">
         <h2 class="section-heading"><i data-lucide="map" style="width: 32px; height: 32px; vertical-align: -5px; margin-right: 8px; color: var(--color-accent);"></i> 会場アクセス</h2>
         <p class="section-subheading">LOCATION & DIRECTIONS</p>
@@ -370,35 +278,8 @@
     </main>
 
 
-    <!-- ==============================================
-         FLOATING BACK TO TOP BUTTON
-         ============================================== -->
-    <button id="backToTop" class="back-to-top" title="トップへ戻る"><i data-lucide="chevron-up"></i></button>
-
-
-    <!-- ==============================================
-         FOOTER
-         ============================================== -->
-    <footer id="footer">
-      <div class="footer-inner">
-        <div class="header-brand">
-          <img src="images/title-text1.png" alt="RE:CREATION">
-        </div>
-        <nav class="footer-nav">
-          <a href="index.html">ホーム</a>
-          <a href="sennsyu.html">出場選手</a>
-          <a href="kyougi.html">競技一覧</a>
-          <a href="basyo.html">集合場所</a>
-          <a href="cosplay.html">コスプレ大会</a>
-          <a href="ranking.html">ランキング</a>
-          <a href="appli.html">呼び出しアプリ</a>
-          <a href="cyuui.html">注意事項</a>
-          <a href="situmonn.html">Q&A</a>
-          <a href="movie.html">ムービー</a>
-        </nav>
-        <p class="footer-copy">©2026 RE:CREATION STAFF. ALL RIGHTS RESERVED.</p>
-      </div>
-    </footer>
+    <!-- FLOATING BACK TO TOP BUTTON -->
+    <site-footer></site-footer>
 
   </div> <!--container-->
 

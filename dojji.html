@@ -5,28 +5,44 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="css/common.css?v=20261016_3">
-  <link rel="stylesheet" href="css/competition.css?v=20261019_1">
   <link rel="stylesheet" href="css/dojji.css?v=20261016_3">
   <title>四天王ドッジボール | RE:CREATION</title>
-<script src="https://unpkg.com/lucide@latest"></script>
-  <script src="js/site-shell.js?v=20261019_1" defer></script>
+  <script>
+    (function (d) {
+      var config = {
+        kitId: 'yon8bkv',
+        scriptTimeout: 3000,
+        async: true
+      },
+        h = d.documentElement, t = setTimeout(function () { h.className = h.className.replace(/\bwf-loading\b/g, "") + " wf-inactive"; }, config.scriptTimeout), tk = d.createElement("script"), f = false, s = d.getElementsByTagName("script")[0], a; h.className += " wf-loading"; tk.src = 'https://use.typekit.net/' + config.kitId + '.js'; tk.async = true; tk.onload = tk.onreadystatechange = function () { a = this.readyState; if (f || a && a != "complete" && a != "loaded") return; f = true; clearTimeout(t); try { Typekit.load(config) } catch (e) { } }; s.parentNode.insertBefore(tk, s)
+    })(document);
+        (function (d) {
+      var config = {
+        kitId: 'sqx3dfn',
+        scriptTimeout: 3000,
+        async: true
+      },
+        h = d.documentElement, t = setTimeout(function () { h.className = h.className.replace(/\bwf-loading\b/g, "") + " wf-inactive"; }, config.scriptTimeout), tk = d.createElement("script"), f = false, s = d.getElementsByTagName("script")[0], a; h.className += " wf-loading"; tk.src = 'https://use.typekit.net/' + config.kitId + '.js'; tk.async = true; tk.onload = tk.onreadystatechange = function () { a = this.readyState; if (f || a && a != "complete" && a != "loaded") return; f = true; clearTimeout(t); try { Typekit.load(config) } catch (e) { } }; s.parentNode.insertBefore(tk, s)
+    })(document);
+    (function (d) {
+      var config = {
+        kitId: 'knm1jcc',
+        scriptTimeout: 3000,
+        async: true
+      },
+        h = d.documentElement, t = setTimeout(function () { h.className = h.className.replace(/\bwf-loading\b/g, "") + " wf-inactive"; }, config.scriptTimeout), tk = d.createElement("script"), f = false, s = d.getElementsByTagName("script")[0], a; h.className += " wf-loading"; tk.src = 'https://use.typekit.net/' + config.kitId + '.js'; tk.async = true; tk.onload = tk.onreadystatechange = function () { a = this.readyState; if (f || a && a != "complete" && a != "loaded") return; f = true; clearTimeout(t); try { Typekit.load(config) } catch (e) { } }; s.parentNode.insertBefore(tk, s)
+    })(document);
+  </script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="js/components.js?v=20261016_3"></script>
 </head>
 
-<body class="page-dojji">
+<body>
 
-  <!-- 3DアリーナCanvas（ゾーンB） -->
-  <canvas id="arena-grid-canvas"></canvas>
-  <canvas id="god-rays-canvas"></canvas>
-  <div class="skylight-ambient-glow"></div>
-  <div class="skylight-roof-strip"></div>
+<div id="container">
 
-  <div id="container">
+    <site-header></site-header>
 
-        <!-- GLOBAL FLOATING HEADER -->
-    <div data-site-header></div>
-
-    <!-- Mobile Navigation Drawer -->
-    <div data-site-mobile-nav></div>
     <!-- Breadcrumb -->
     <div class="breadcrumb">
       <a href="index.html">ホーム</a>
@@ -261,15 +277,14 @@
       </div>
 
     </main>
-        <!-- Floating Back to Top Button -->
-    <button id="backToTop" class="back-to-top" title="トップへ戻る">▲</button>
-
-    <!-- Footer -->
-    <div data-site-footer></div>
+    <site-footer></site-footer>
 
   </div> <!--container-->
 
-  <script src="js/jQuery-v3.7.1.js?v=20261016_3"></script>
-  <script src="js/script.js?v=20261016_3"></script>
+  <script>if(window.lucide){lucide.createIcons();}</script>
 </body>
+
+<script src="js/jQuery-v3.7.1.js?v=20261016_3"></script>
+<script src="js/script.js?v=20261016_3"></script>
+
 </html>

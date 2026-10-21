@@ -9,24 +9,15 @@
   <title>ランキング | RE:CREATION</title>
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
-  <script src="js/site-shell.js?v=20261019_1" defer></script>
+  <script src="js/components.js?v=20261016_3"></script>
 </head>
 
 <body class="page-ranking">
 
   <!-- 3Dアリーナ全画面背景Canvas（案C: 左右立体スタンド＆トラス梁・中央完全クリーン） -->
-  <canvas id="arena-grid-canvas"></canvas>
-  <canvas id="god-rays-canvas"></canvas>
-  <div class="skylight-ambient-glow"></div>
-  <div class="skylight-roof-strip"></div>
+<div id="container">
 
-  <div id="container">
-
-    <!-- GLOBAL FLOATING HEADER -->
-    <div data-site-header></div>
-
-    <!-- Mobile Navigation Drawer -->
-    <div data-site-mobile-nav></div>
+    <site-header></site-header>
 
     <!-- Breadcrumb -->
     <div class="breadcrumb">
@@ -38,7 +29,7 @@
     <!-- Main Content -->
     <main class="main ranking-main">
 
-      <!-- 1. 原作完全準拠タイトル -->
+      <!-- タイトル -->
       <div class="ranking-title ">
         <div class="page-symbol-badge">
           <div class="symbol-pod">
@@ -48,18 +39,18 @@
         <h2>ランキング</h2>
       </div>
 
-      <!-- 2. 原作完全準拠導入文（文字特大・中央強調） -->
+      <!-- 導入文 -->
       <div class="ranking-kousin">
         <h4 class="ranking-kousin-text">
           ランキング結果は以下の通りです。
         </h4>
       </div>
 
-      <!-- 3. 文字が圧倒的主役の特大ランキングテーブル（1位〜8位 全10クラス原作完全一致） -->
+      <!-- ランキングテーブル -->
       <div class="ranking-table-card">
         <table class="tableR">
           <tbody>
-            <!-- 1位: AT13B 500点 (ゴールド特大強調) -->
+            <!-- 1位 -->
             <tr class="rank-row-top rank-1">
               <td class="rank-badge-cell">
                 <span class="rank-badge gold">1</span>
@@ -72,7 +63,7 @@
               </td>
             </tr>
 
-            <!-- 2位: AT12C 490点 (シルバー特大強調) -->
+            <!-- 2位 -->
             <tr class="rank-row-top rank-2">
               <td class="rank-badge-cell">
                 <span class="rank-badge silver">2</span>
@@ -85,7 +76,7 @@
               </td>
             </tr>
 
-            <!-- 3位: AT11D・AT41A 460点 (ブロンズ特大強調) -->
+            <!-- 3位 -->
             <tr class="rank-row-top rank-3">
               <td class="rank-badge-cell">
                 <span class="rank-badge bronze">3</span>
@@ -98,7 +89,7 @@
               </td>
             </tr>
 
-            <!-- 4位: AT14A 420点 -->
+            <!-- 4位 -->
             <tr class="rank-row">
               <td class="rank-badge-cell">
                 <span class="rank-badge normal">4</span>
@@ -111,7 +102,7 @@
               </td>
             </tr>
 
-            <!-- 5位: AT11B 410点 (同率5位) -->
+            <!-- 5位 -->
             <tr class="rank-row">
               <td class="rank-badge-cell">
                 <span class="rank-badge normal">5</span>
@@ -124,7 +115,7 @@
               </td>
             </tr>
 
-            <!-- 5位: AT12A 410点 (同率5位) -->
+            <!-- 5位 -->
             <tr class="rank-row">
               <td class="rank-badge-cell">
                 <span class="rank-badge normal">5</span>
@@ -137,7 +128,7 @@
               </td>
             </tr>
 
-            <!-- 7位: AD11B 400点 -->
+            <!-- 7位 -->
             <tr class="rank-row">
               <td class="rank-badge-cell">
                 <span class="rank-badge normal">7</span>
@@ -150,7 +141,7 @@
               </td>
             </tr>
 
-            <!-- 8位: AT12D 390点 (同率8位) -->
+            <!-- 8位 -->
             <tr class="rank-row">
               <td class="rank-badge-cell">
                 <span class="rank-badge normal">8</span>
@@ -163,7 +154,7 @@
               </td>
             </tr>
 
-            <!-- 8位: AT14C 390点 (同率8位) -->
+            <!-- 8位 -->
             <tr class="rank-row">
               <td class="rank-badge-cell">
                 <span class="rank-badge normal">8</span>
@@ -176,7 +167,7 @@
               </td>
             </tr>
 
-            <!-- 8位: AP13A 390点 (同率8位) -->
+            <!-- 8位 -->
             <tr class="rank-row">
               <td class="rank-badge-cell">
                 <span class="rank-badge normal">8</span>
@@ -195,16 +186,18 @@
 
     </main>
 
-    <!-- Floating Back to Top Button -->
-    <button id="backToTop" class="back-to-top" title="トップへ戻る"><i data-lucide="chevron-up"></i></button>
-
-    <!-- Footer -->
-    <div data-site-footer></div>
+    <site-footer></site-footer>
 
   </div> <!--container-->
 
   <script src="js/jQuery-v3.7.1.js?v=20261016_3"></script>
   <script src="js/script.js?v=20261016_3"></script>
+  <script>
+    if (window.lucide) {
+      lucide.createIcons();
+    }
+  </script>
+
 </body>
 
 </html>

@@ -1,4 +1,14 @@
 @charset "utf-8";
-/* Page-specific assets; shared layout lives in competition.css. */
-.relay-img { background-image: url("../images/about-relay.jpg"); }
-.relaybasyo-img { background-image: url("../images/place-relay.jpg"); }
+
+/* =========================================================
+   学科対抗リレー専用スタイル (relay.css)
+   共通レイアウト・タイトル・枠線・詳細ブロックは common.css に集約済み
+   ========================================================= */
+
+.relay-img {
+  background-image: url(../images/about-relay.jpg);
+}
+
+.relaybasyo-img {
+  background-image: url(../images/place-relay.jpg);
+}
